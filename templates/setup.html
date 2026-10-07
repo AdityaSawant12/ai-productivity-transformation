@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Setup Required – MailMind</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Inter',sans-serif;background:#09090f;color:#e8e8f0;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:2rem;}
+    .card{background:#13131f;border:1px solid rgba(255,255,255,0.07);border-radius:20px;padding:2.5rem;max-width:620px;width:100%;}
+    h1{font-size:1.6rem;font-weight:800;margin-bottom:0.5rem;color:#ff6b6b;}
+    p{color:#7a7a9a;line-height:1.7;margin-bottom:1rem;font-size:0.95rem;}
+    ol{margin-left:1.4rem;color:#c0c0d0;line-height:2;}
+    code{background:rgba(108,99,255,0.15);border:1px solid rgba(108,99,255,0.3);border-radius:5px;padding:0.15em 0.4em;font-size:0.88em;color:#a89fff;}
+    a{color:#6c63ff;text-decoration:none;}
+    .btn{display:inline-flex;align-items:center;gap:.4rem;margin-top:1.5rem;padding:.7rem 1.4rem;background:linear-gradient(135deg,#6c63ff,#4c46cc);color:#fff;border-radius:10px;font-weight:600;font-size:.9rem;text-decoration:none;}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>⚙️ Setup Required</h1>
+    <p>A <code>credentials.json</code> file from Google Cloud Console is required before connecting Gmail. Follow these steps:</p>
+    <ol>
+      <li>Go to <a href="https://console.cloud.google.com/" target="_blank">console.cloud.google.com</a></li>
+      <li>Create a project (or select an existing one)</li>
+      <li>Enable the <strong>Gmail API</strong> and <strong>Google OAuth2</strong> API</li>
+      <li>Go to <strong>Credentials → Create OAuth 2.0 Client ID</strong></li>
+      <li>Choose <strong>Web Application</strong>, set redirect URI to:<br/><code>http://localhost:5000/oauth2callback</code></li>
+      <li>Download the JSON and save it as <code>credentials.json</code> in the project folder</li>
+    </ol>
+    <a href="/" class="btn">← Back to Home</a>
+  </div>
+</body>
+</html>

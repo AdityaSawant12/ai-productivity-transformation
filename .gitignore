@@ -1,0 +1,29 @@
+# ── Secrets (NEVER commit these) ─────────────────────────────────────────────
+.env
+credentials.json
+
+# ── Large data / sample files ─────────────────────────────────────────────────
+invoices/
+
+# ── Python ────────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg-info/
+dist/
+build/
+.eggs/
+*.egg
+venv/
+.venv/
+env/
+ENV/
+
+# ── IDE / OS ──────────────────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
