@@ -312,6 +312,179 @@
       .sidebar { position: static; height: auto; border-right: none; border-bottom: 1px solid var(--border); }
       .main { height: auto; }
     }
+
+    /* ── Draft Reply Button ── */
+    .draft-action-bar { margin-top: 1rem; padding-top: 0.75rem; border-top: 1px solid var(--border); }
+    .btn-draft-reply {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      padding: 0.5rem 1rem; border-radius: 8px; border: 1px solid rgba(108,99,255,0.35);
+      background: rgba(108,99,255,0.1); color: #a89fff;
+      font-family: 'Inter', sans-serif; font-size: 0.82rem; font-weight: 500;
+      cursor: pointer; transition: all 0.15s;
+    }
+    .btn-draft-reply:hover { background: rgba(108,99,255,0.2); border-color: rgba(108,99,255,0.6); }
+
+    /* ── Compose Modal Overlay ── */
+    .compose-overlay {
+      display: none;
+      position: fixed; inset: 0; z-index: 300;
+      background: rgba(0,0,0,0.55);
+      backdrop-filter: blur(4px);
+      align-items: flex-end; justify-content: flex-end;
+      padding: 1.5rem;
+    }
+    .compose-overlay.open { display: flex; }
+
+    .compose-window {
+      width: 580px; max-width: calc(100vw - 2rem);
+      background: var(--surface);
+      border: 1px solid var(--border2);
+      border-radius: 16px;
+      box-shadow: 0 24px 80px rgba(0,0,0,0.7), 0 0 0 1px rgba(108,99,255,0.15);
+      display: flex; flex-direction: column;
+      max-height: calc(100vh - 3rem);
+      animation: composeIn 0.25s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    @keyframes composeIn { from { opacity:0; transform:translateY(30px) scale(0.97); } to { opacity:1; transform:none; } }
+
+    /* Compose header */
+    .compose-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0.85rem 1.1rem;
+      background: linear-gradient(135deg, rgba(108,99,255,0.2), rgba(0,212,255,0.08));
+      border-bottom: 1px solid var(--border);
+      border-radius: 16px 16px 0 0;
+    }
+    .compose-title { font-size: 0.9rem; font-weight: 700; color: var(--text); display:flex; align-items:center; gap:.5rem; }
+    .compose-title-badge { font-size:0.7rem; background:rgba(108,99,255,0.25); color:#a89fff; padding:.15rem .5rem; border-radius:100px; font-weight:600; }
+    .compose-hdr-btns { display:flex; gap:0.4rem; }
+    .compose-hdr-btn {
+      width: 28px; height: 28px; border-radius: 8px; border: none;
+      background: var(--surface2); color: var(--muted);
+      cursor: pointer; font-size: 0.85rem;
+      display:flex; align-items:center; justify-content:center;
+      transition: all 0.15s;
+    }
+    .compose-hdr-btn:hover { background: var(--surface3); color: var(--text); }
+    .compose-hdr-btn.danger:hover { background: rgba(255,107,107,0.2); color: var(--danger); }
+
+    /* Recipient rows */
+    .compose-fields { display:flex; flex-direction:column; border-bottom: 1px solid var(--border); }
+    .field-row {
+      display: flex; align-items: flex-start;
+      padding: 0.55rem 1rem; gap: 0.5rem;
+      border-bottom: 1px solid var(--border);
+      min-height: 40px;
+    }
+    .field-row:last-child { border-bottom: none; }
+    .field-label { font-size: 0.75rem; font-weight: 600; color: var(--muted); min-width: 36px; padding-top: 0.3rem; }
+    .chips-input {
+      display: flex; flex-wrap: wrap; align-items: center; gap: 0.35rem;
+      flex: 1; min-width: 0;
+    }
+    .chip {
+      display: inline-flex; align-items: center; gap: 0.3rem;
+      background: rgba(108,99,255,0.18); border: 1px solid rgba(108,99,255,0.3);
+      border-radius: 100px; padding: 0.15rem 0.55rem 0.15rem 0.7rem;
+      font-size: 0.78rem; color: #c4bfff;
+    }
+    .chip-del {
+      cursor: pointer; color: var(--muted2); font-size: 0.8rem; line-height: 1;
+      background: none; border: none; padding: 0; margin-left: 0.1rem;
+    }
+    .chip-del:hover { color: var(--danger); }
+    .chips-input input {
+      background: none; border: none; outline: none;
+      color: var(--text); font-family: 'Inter', sans-serif;
+      font-size: 0.85rem; min-width: 120px; flex: 1;
+    }
+    .field-row-extra { display:flex; align-items:center; gap:0.4rem; }
+    .toggle-cc { font-size:0.72rem; color:var(--muted); cursor:pointer; padding:.15rem .4rem; border-radius:4px; background:none; border:none; font-family:'Inter',sans-serif; }
+    .toggle-cc:hover { color:var(--accent); }
+    .subject-input {
+      background: none; border: none; outline: none;
+      color: var(--text); font-family: 'Inter', sans-serif;
+      font-size: 0.88rem; font-weight: 500; width: 100%; flex:1;
+    }
+    .subject-input::placeholder { color: var(--muted2); }
+
+    /* Body */
+    .compose-body {
+      flex: 1; overflow-y: auto;
+      padding: 1rem;
+      position: relative;
+      min-height: 220px; max-height: 360px;
+    }
+    .compose-textarea {
+      width: 100%; height: 100%; min-height: 200px;
+      background: none; border: none; outline: none; resize: none;
+      color: var(--text); font-family: 'Inter', sans-serif;
+      font-size: 0.875rem; line-height: 1.7;
+    }
+    .compose-textarea::placeholder { color: var(--muted2); }
+
+    /* Loading overlay inside body */
+    .compose-loading {
+      display: none; position: absolute; inset: 0;
+      align-items: center; justify-content: center; flex-direction: column; gap: 0.75rem;
+      background: var(--surface);
+      border-radius: 0 0 16px 16px;
+    }
+    .compose-loading.show { display: flex; }
+    .compose-spin {
+      width: 36px; height: 36px; border-radius: 50%;
+      border: 3px solid var(--surface3);
+      border-top-color: var(--accent);
+      animation: spin 0.8s linear infinite;
+    }
+    .compose-load-text { font-size: 0.82rem; color: var(--muted); }
+
+    /* Footer */
+    .compose-footer {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0.75rem 1rem;
+      border-top: 1px solid var(--border);
+      gap: 0.5rem;
+    }
+    .compose-footer-left { display:flex; gap:0.5rem; }
+    .compose-send-btn {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      padding: 0.55rem 1.25rem; border-radius: 9px; border: none;
+      background: linear-gradient(135deg, var(--accent), #4c46cc);
+      color: #fff; font-family: 'Inter', sans-serif;
+      font-size: 0.85rem; font-weight: 600;
+      cursor: pointer; transition: all 0.15s;
+      box-shadow: 0 3px 12px rgba(108,99,255,0.35);
+    }
+    .compose-send-btn:hover { transform:translateY(-1px); box-shadow:0 6px 20px rgba(108,99,255,0.5); }
+    .compose-send-btn:disabled { opacity:0.5; cursor:not-allowed; transform:none; }
+    .compose-draft-btn {
+      display: inline-flex; align-items: center; gap: 0.35rem;
+      padding: 0.5rem 0.9rem; border-radius: 9px;
+      border: 1px solid var(--border2); background: var(--surface2);
+      color: var(--muted); font-family:'Inter',sans-serif;
+      font-size:0.82rem; font-weight:500; cursor:pointer; transition:all 0.15s;
+    }
+    .compose-draft-btn:hover { color:var(--text); background:var(--surface3); }
+    .compose-discard-btn {
+      display: inline-flex; align-items: center; gap: 0.35rem;
+      padding: 0.5rem 0.9rem; border-radius: 9px;
+      border: 1px solid rgba(255,107,107,0.2); background: rgba(255,107,107,0.08);
+      color: var(--danger); font-family:'Inter',sans-serif;
+      font-size:0.82rem; font-weight:500; cursor:pointer; transition:all 0.15s;
+    }
+    .compose-discard-btn:hover { background:rgba(255,107,107,0.18); }
+
+    /* Sent success overlay */
+    .compose-success {
+      display: none; position: absolute; inset: 0;
+      align-items: center; justify-content: center; flex-direction: column; gap: 0.75rem;
+      background: var(--surface); border-radius: 16px; z-index:10;
+    }
+    .compose-success.show { display:flex; }
+    .compose-success-icon { font-size:2.5rem; }
+    .compose-success-title { font-size:1rem; font-weight:700; color:var(--success); }
+    .compose-success-sub { font-size:0.8rem; color:var(--muted); }
   </style>
 </head>
 <body>
@@ -321,10 +494,16 @@
 
 <!-- Top Nav -->
 <nav class="topnav">
-  <a href="/" class="logo" style="text-decoration:none;color:inherit;">
-    <div class="logo-icon">✉️</div>
-    <span>MailMind</span>
-  </a>
+  <div style="display:flex;align-items:center;gap:1rem;">
+    <a href="/" class="logo" style="text-decoration:none;color:inherit;">
+      <div class="logo-icon">✉️</div>
+      <span>MailMind</span>
+    </a>
+    <div style="display:flex;gap:0.25rem;">
+      <a href="/dashboard" style="display:inline-flex;align-items:center;gap:.35rem;padding:.45rem .85rem;border-radius:8px;font-family:'Inter',sans-serif;font-size:.82rem;font-weight:500;text-decoration:none;background:rgba(108,99,255,0.15);color:#a89fff;">📧 Emails</a>
+      <a href="/meetings"  style="display:inline-flex;align-items:center;gap:.35rem;padding:.45rem .85rem;border-radius:8px;font-family:'Inter',sans-serif;font-size:.82rem;font-weight:500;text-decoration:none;color:var(--muted);">🎙️ Meetings</a>
+    </div>
+  </div>
   <div class="user-info">
     {% if user_info.get('picture') %}
       <img class="avatar" src="{{ user_info.picture }}" alt="User avatar" />
@@ -336,6 +515,7 @@
     <a href="/logout" class="nav-btn nav-btn-ghost">Logout</a>
   </div>
 </nav>
+
 
 <!-- Layout -->
 <div class="layout">
@@ -451,9 +631,301 @@
 
 </div>
 
+<!-- ── Compose Modal ── -->
+<div class="compose-overlay" id="compose-overlay" onclick="handleOverlayClick(event)">
+  <div class="compose-window" id="compose-window">
+
+    <!-- Success overlay -->
+    <div class="compose-success" id="compose-success">
+      <div class="compose-success-icon">✉️</div>
+      <div class="compose-success-title">Email Sent!</div>
+      <div class="compose-success-sub">Your reply was delivered successfully.</div>
+    </div>
+
+    <!-- Header -->
+    <div class="compose-header">
+      <div class="compose-title">
+        ✍️ Compose Reply
+        <span class="compose-title-badge">AI Draft</span>
+      </div>
+      <div class="compose-hdr-btns">
+        <button class="compose-hdr-btn danger" title="Discard" onclick="discardCompose()">✕</button>
+      </div>
+    </div>
+
+    <!-- Fields -->
+    <div class="compose-fields">
+      <!-- To -->
+      <div class="field-row" id="to-row">
+        <span class="field-label">To</span>
+        <div class="chips-input" id="to-chips" onclick="focusChipInput('to-input')"></div>
+        <input id="to-input" class="chips-input" style="background:none;border:none;outline:none;color:var(--text);font-family:inherit;font-size:.85rem;min-width:120px;flex:1;" placeholder="Add recipient…" />
+        <div class="field-row-extra">
+          <button class="toggle-cc" onclick="toggleCcBcc()">Cc / Bcc</button>
+        </div>
+      </div>
+
+      <!-- CC (hidden by default) -->
+      <div class="field-row" id="cc-row" style="display:none;">
+        <span class="field-label">Cc</span>
+        <div class="chips-input" id="cc-chips" onclick="focusChipInput('cc-input')"></div>
+        <input id="cc-input" class="chips-input" style="background:none;border:none;outline:none;color:var(--text);font-family:inherit;font-size:.85rem;min-width:120px;flex:1;" placeholder="Add Cc…" />
+      </div>
+
+      <!-- BCC (hidden by default) -->
+      <div class="field-row" id="bcc-row" style="display:none;">
+        <span class="field-label">Bcc</span>
+        <div class="chips-input" id="bcc-chips" onclick="focusChipInput('bcc-input')"></div>
+        <input id="bcc-input" class="chips-input" style="background:none;border:none;outline:none;color:var(--text);font-family:inherit;font-size:.85rem;min-width:120px;flex:1;" placeholder="Add Bcc…" />
+      </div>
+
+      <!-- Subject -->
+      <div class="field-row">
+        <span class="field-label">Sub</span>
+        <input id="compose-subject" class="subject-input" type="text" placeholder="Subject" />
+      </div>
+    </div>
+
+    <!-- Body -->
+    <div class="compose-body">
+      <textarea id="compose-body-ta" class="compose-textarea" placeholder="Write your message…"></textarea>
+      <!-- Loading state -->
+      <div class="compose-loading" id="compose-loading">
+        <div class="compose-spin"></div>
+        <div class="compose-load-text">Gemini is drafting your reply…</div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="compose-footer">
+      <div class="compose-footer-left">
+        <button class="compose-send-btn" id="compose-send-btn" onclick="sendComposedEmail()">
+          ➤ Send
+        </button>
+        <button class="compose-draft-btn" onclick="saveComposeDraft()">💾 Save Draft</button>
+      </div>
+      <button class="compose-discard-btn" onclick="discardCompose()">🗑 Discard</button>
+    </div>
+
+  </div>
+</div>
+
 <script>
+  // ── Compose Modal State ──────────────────────────────────────────────────────
+  let composeRecipients = { to: [], cc: [], bcc: [] };
+
+  function openDraftModal(emailId) {
+    const emailData = emailDataMap[emailId];
+    if (!emailData) { toast('Could not load email data — please refresh', 'error'); return; }
+
+    // Reset modal
+    composeRecipients = { to: [], cc: [], bcc: [] };
+    ['to','cc','bcc'].forEach(f => {
+      document.getElementById(f+'-chips').innerHTML = '';
+      document.getElementById(f+'-input').value = '';
+    });
+    document.getElementById('cc-row').style.display = 'none';
+    document.getElementById('bcc-row').style.display = 'none';
+    document.getElementById('compose-body-ta').value = '';
+    document.getElementById('compose-success').classList.remove('show');
+    document.getElementById('compose-send-btn').disabled = false;
+    document.getElementById('compose-send-btn').innerHTML = '➤ Send';
+
+    // Pre-fill subject
+    document.getElementById('compose-subject').value = 'Re: ' + (emailData.subject || '');
+
+    // Pre-fill To from sender
+    const senderMatch = (emailData.sender || '').match(/<(.+?)>/);
+    const senderEmail = senderMatch ? senderMatch[1] : (emailData.sender || '');
+    if (senderEmail) addChip('to', senderEmail);
+
+    // Show modal
+    document.getElementById('compose-overlay').classList.add('open');
+
+    // Fetch AI draft
+    loadAIDraft(emailData);
+  }
+
+  async function loadAIDraft(emailData) {
+    document.getElementById('compose-loading').classList.add('show');
+    document.getElementById('compose-body-ta').style.display = 'none';
+
+    try {
+      const res = await fetch('/api/draft', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          subject: emailData.subject,
+          sender:  emailData.sender,
+          summary: emailData.summary,
+          body_hint: ''
+        })
+      });
+      const data = await res.json();
+      if (data.ok) {
+        document.getElementById('compose-body-ta').value = data.draft_text || '';
+      } else {
+        document.getElementById('compose-body-ta').value = '[Draft generation failed: ' + (data.error || 'unknown error') + ']';
+      }
+    } catch(e) {
+      document.getElementById('compose-body-ta').value = '[Network error: ' + e.message + ']';
+    }
+
+    document.getElementById('compose-loading').classList.remove('show');
+    document.getElementById('compose-body-ta').style.display = 'block';
+  }
+
+  function discardCompose() {
+    document.getElementById('compose-overlay').classList.remove('open');
+  }
+
+  function handleOverlayClick(e) {
+    if (e.target === document.getElementById('compose-overlay')) discardCompose();
+  }
+
+  function toggleCcBcc() {
+    const cc  = document.getElementById('cc-row');
+    const bcc = document.getElementById('bcc-row');
+    const show = cc.style.display === 'none';
+    cc.style.display  = show ? 'flex' : 'none';
+    bcc.style.display = show ? 'flex' : 'none';
+    if (show) document.getElementById('cc-input').focus();
+  }
+
+  // ── Recipient Chips ──────────────────────────────────────────────────────────
+  function addChip(field, email) {
+    email = email.trim().replace(/,+$/, '');
+    if (!email || composeRecipients[field].includes(email)) return;
+    composeRecipients[field].push(email);
+    renderChips(field);
+  }
+
+  function removeChip(field, email) {
+    composeRecipients[field] = composeRecipients[field].filter(e => e !== email);
+    renderChips(field);
+  }
+
+  function renderChips(field) {
+    const container = document.getElementById(field + '-chips');
+    container.innerHTML = '';
+    composeRecipients[field].forEach(email => {
+      const chip = document.createElement('span');
+      chip.className = 'chip';
+      chip.innerHTML = `${escHtml(email)}<button class="chip-del" onclick="removeChip('${field}','${escHtml(email)}')">✕</button>`;
+      container.appendChild(chip);
+    });
+  }
+
+  function focusChipInput(inputId) {
+    document.getElementById(inputId).focus();
+  }
+
+  // Wire chip inputs
+  ['to','cc','bcc'].forEach(field => {
+    const input = document.getElementById(field + '-input');
+    if (!input) return;
+    input.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ',' || e.key === 'Tab') {
+        e.preventDefault();
+        const val = input.value.trim().replace(/,+$/, '');
+        if (val) { addChip(field, val); input.value = ''; }
+      } else if (e.key === 'Backspace' && !input.value && composeRecipients[field].length) {
+        const last = composeRecipients[field][composeRecipients[field].length - 1];
+        removeChip(field, last);
+      }
+    });
+    input.addEventListener('blur', () => {
+      const val = input.value.trim().replace(/,+$/, '');
+      if (val) { addChip(field, val); input.value = ''; }
+    });
+  });
+
+  // ── Send Email ───────────────────────────────────────────────────────────────
+  async function sendComposedEmail() {
+    // Flush any unconfirmed input
+    ['to','cc','bcc'].forEach(f => {
+      const inp = document.getElementById(f+'-input');
+      const val = inp.value.trim().replace(/,+$/,'');
+      if (val) { addChip(f, val); inp.value = ''; }
+    });
+
+    if (!composeRecipients.to.length) {
+      toast('Please add at least one recipient in To field', 'error');
+      return;
+    }
+
+    const btn = document.getElementById('compose-send-btn');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spin">⟳</span> Sending…';
+
+    const payload = {
+      to:      composeRecipients.to.join(', '),
+      cc:      composeRecipients.cc.join(', '),
+      bcc:     composeRecipients.bcc.join(', '),
+      subject: document.getElementById('compose-subject').value,
+      body:    document.getElementById('compose-body-ta').value,
+    };
+
+    try {
+      const res  = await fetch('/api/send', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+
+      if (data.ok) {
+        document.getElementById('compose-success').classList.add('show');
+        toast('Email sent successfully! ✉️', 'success');
+        setTimeout(() => discardCompose(), 2200);
+      } else {
+        toast('Send failed: ' + (data.error || 'unknown error'), 'error', 6000);
+        btn.disabled = false;
+        btn.innerHTML = '➤ Send';
+      }
+    } catch(e) {
+      toast('Network error: ' + e.message, 'error', 6000);
+      btn.disabled = false;
+      btn.innerHTML = '➤ Send';
+    }
+  }
+
+  // ── Save Draft to Gmail ──────────────────────────────────────────────────────
+  async function saveComposeDraft() {
+    ['to','cc','bcc'].forEach(f => {
+      const inp = document.getElementById(f+'-input');
+      const val = inp.value.trim().replace(/,+$/,'');
+      if (val) { addChip(f, val); inp.value = ''; }
+    });
+
+    const payload = {
+      subject: document.getElementById('compose-subject').value,
+      sender:  composeRecipients.to.join(', '),
+      summary: document.getElementById('compose-body-ta').value,
+      body_hint: ''
+    };
+
+    // Re-use the existing /api/draft endpoint which saves to Gmail Drafts
+    toast('Saving draft to Gmail…', 'info', 3000);
+    try {
+      const res = await fetch('/api/draft', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+      if (data.ok && data.gmail_url) {
+        toast('Draft saved! <a href="' + data.gmail_url + '" target="_blank" style="color:var(--accent2);text-decoration:underline;">Open in Gmail ↗</a>', 'success', 5000);
+      } else {
+        toast('Draft saved locally (Gmail save failed)', 'info');
+      }
+    } catch(e) {
+      toast('Could not save draft: ' + e.message, 'error');
+    }
+  }
   // ── State ──────────────────────────────────────────────────────────────────
   let allSummaries = [];
+  let emailDataMap  = {};   // id → summary object (avoids fragile data-attr serialization)
   let pollingActive = false;
   let pollingInterval = null;
 
@@ -524,6 +996,9 @@
         ? `<div class="att-chips">${s.attachments.map(f => `<span class="att-chip">${fileIcon(f)} ${f}</span>`).join('')}</div>`
         : '';
 
+      // Store email data in JS map, pass only the id to the button
+      emailDataMap[s.id] = { id: s.id, subject: s.subject, sender: s.sender, summary: s.summary };
+
       card.innerHTML = `
         <div class="card-header" onclick="toggleCard(this.parentElement)">
           <div class="card-meta">
@@ -541,6 +1016,11 @@
           <div class="card-body-inner">
             <div class="summary-content">${renderMarkdown(s.summary)}</div>
             ${attChips}
+            <div class="draft-action-bar">
+              <button class="btn-draft-reply" onclick="openDraftModal('${escHtml(s.id)}')">
+                ✍️ Draft Reply
+              </button>
+            </div>
           </div>
         </div>
       `;

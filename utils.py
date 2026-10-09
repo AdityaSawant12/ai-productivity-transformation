@@ -233,3 +233,48 @@ Format your response with clear headings using markdown."""
                 wait *= 2   # exponential backoff: 2s → 4s → 8s
                 continue
             return f"[Summarization failed: {e}]"
+
+
+# ─── Draft Reply ────────────────────────────────────────────────────────────────
+
+def draft_reply(subject: str, sender: str, summary: str,
+                user_instructions: str, client) -> str:
+    """Use Gemini to compose a professional email reply."""
+    instruction_block = ""
+    if user_instructions and user_instructions.strip():
+        instruction_block = f"\n\nAdditional instructions from the user:\n{user_instructions.strip()}"
+
+    prompt = f"""You are a professional email assistant. Write a clear, polite, and concise reply to the following email.
+
+**Original Email Details:**
+- From: {sender}
+- Subject: {subject}
+- Summary: {summary}
+{instruction_block}
+
+**Instructions:**
+- Write ONLY the body of the reply email (no subject line, no "From:", no "To:")
+- Start with a polite greeting (e.g. "Hi [Name],")
+- Keep it professional and concise
+- End with a proper sign-off (e.g. "Best regards,\\n[Your Name]")
+- Do NOT include any meta-commentary or explanations — just the email body"""
+
+    max_retries = 4
+    wait = 2
+    for attempt in range(max_retries):
+        try:
+            response = client.models.generate_content(
+                model=MODEL_ID,
+                contents=prompt
+            )
+            return response.text
+        except Exception as e:
+            err = str(e)
+            if "429" in err or "RESOURCE_EXHAUSTED" in err:
+                return "[Quota exceeded] Cannot draft reply — daily API limit reached."
+            if attempt < max_retries - 1 and any(x in err for x in ["503", "UNAVAILABLE"]):
+                time.sleep(wait)
+                wait *= 2
+                continue
+            return f"[Draft failed: {e}]"
+
