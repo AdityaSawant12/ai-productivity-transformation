@@ -10,7 +10,7 @@ import traceback
 
 from flask import Blueprint, jsonify, request, session
 from auth_helpers import creds_from_session, creds_to_dict, get_gmail_service
-from utils import get_gemini_client, parse_gmail_message, summarize_email, draft_reply
+from utils import get_gemini_client, parse_gmail_message, summarize_email, draft_reply, MODEL_ID
 
 email_bp = Blueprint("email", __name__)
 
@@ -20,6 +20,10 @@ _summaries_store: dict[str, list] = {}
 _polling_threads: dict[str, threading.Thread] = {}
 _polling_active:  dict[str, bool] = {}
 _store_lock = threading.Lock()
+
+# Cache: session_key -> { email_id -> attachment_summary_text }
+_att_summary_cache: dict[str, dict] = {}
+
 
 
 # ─── Service: Fetch & Summarize ───────────────────────────────────────────────
@@ -268,3 +272,97 @@ def api_send():
                             "error": "Send permission denied — log out, revoke app at "
                                      "myaccount.google.com/permissions, then log back in"}), 403
         return jsonify({"ok": False, "error": err}), 500
+
+
+# ─── Attachment Analysis (on-demand) ──────────────────────────────────────────
+
+@email_bp.route("/api/analyze-attachments/<email_id>", methods=["POST"])
+def api_analyze_attachments(email_id):
+    """
+    Lazy attachment analysis: called only when the user clicks the dropdown.
+    Fetches the Gmail message, extracts each attachment's content, and asks
+    Gemini for a detailed per-attachment summary. Result is cached per session.
+    """
+    creds = creds_from_session()
+    if not creds:
+        return jsonify({"ok": False, "error": "Not authenticated"}), 401
+
+    sk = session.get("session_key", "")
+
+    # Return cached result if available
+    cached = _att_summary_cache.get(sk, {}).get(email_id)
+    if cached:
+        return jsonify({"ok": True, "summary": cached, "cached": True})
+
+    try:
+        from google.oauth2.credentials import Credentials
+        from google.auth.transport.requests import Request
+
+        creds_obj = Credentials(**creds_to_dict(creds))
+        if creds_obj.expired and creds_obj.refresh_token:
+            creds_obj.refresh(Request())
+
+        gmail  = get_gmail_service(creds_obj)
+        client = get_gemini_client()
+
+        # Re-fetch the full message
+        msg = gmail.users().messages().get(
+            userId="me", id=email_id, format="full"
+        ).execute()
+
+        email_data = parse_gmail_message(msg, client)
+        attachments = email_data.get("attachments", [])
+
+        if not attachments:
+            return jsonify({"ok": True, "summary": "No attachments found in this email.", "cached": False})
+
+        # Build a rich Gemini prompt with all attachment contents
+        att_blocks = ""
+        for att in attachments:
+            att_blocks += f"\n\n--- Attachment: {att['filename']} ---\n{att['content']}"
+
+        prompt = f"""You are a document analysis assistant. Analyze the following email attachments and provide a detailed summary for EACH one.
+
+Email Subject: {email_data['subject']}
+From: {email_data['sender']}
+
+{att_blocks}
+
+For each attachment, provide:
+1. **File name** and type
+2. **Key content summary** (what it contains, main topics/data)
+3. **Important details** (numbers, names, dates, key findings)
+4. **Action items** from this attachment (if any)
+
+Use clear markdown with headings for each attachment. Be thorough and specific."""
+
+        max_retries = 3
+        wait = 2
+        summary_text = ""
+        for attempt in range(max_retries):
+            try:
+                response = client.models.generate_content(model=MODEL_ID, contents=prompt)
+                summary_text = response.text
+                break
+            except Exception as e:
+                err = str(e)
+                if "429" in err or "RESOURCE_EXHAUSTED" in err:
+                    summary_text = "[Quota exceeded] Cannot analyze attachments — daily API limit reached."
+                    break
+                if attempt < max_retries - 1 and any(x in err for x in ["503", "UNAVAILABLE"]):
+                    time.sleep(wait)
+                    wait *= 2
+                    continue
+                summary_text = f"[Analysis failed: {e}]"
+
+        # Cache the result
+        if sk not in _att_summary_cache:
+            _att_summary_cache[sk] = {}
+        _att_summary_cache[sk][email_id] = summary_text
+
+        return jsonify({"ok": True, "summary": summary_text, "cached": False})
+
+    except Exception as e:
+        traceback.print_exc()
+        return jsonify({"ok": False, "error": str(e)}), 500
+

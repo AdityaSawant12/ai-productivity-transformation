@@ -9,7 +9,7 @@ import hashlib
 import secrets
 import traceback
 
-from flask import Flask, render_template, redirect, url_for, session, request
+from flask import Flask, render_template, redirect, url_for, session, request, jsonify
 from dotenv import load_dotenv
 
 # ─── Auth & Helpers ───────────────────────────────────────────────────────────
@@ -54,6 +54,7 @@ def _pkce_pair() -> tuple[str, str]:
 
 @app.route("/")
 def index():
+    from auth_helpers import _get_client_config
     creds     = creds_from_session()
     user_info = None
     if creds:
@@ -61,7 +62,80 @@ def index():
             user_info = get_user_info(creds)
         except Exception:
             pass
-    return render_template("index.html", user_info=user_info)
+    configured = bool(_get_client_config()) or os.path.exists("credentials.json")
+    # First-time setup: redirect to credentials page if nothing is configured yet
+    if not configured:
+        return redirect(url_for("setup_credentials"))
+    return render_template("index.html", user_info=user_info, configured=configured)
+
+
+@app.route("/setup-credentials")
+def setup_credentials():
+    """Show the credential setup page so users can enter Client ID & Secret."""
+    from auth_helpers import _get_client_config
+    configured = bool(_get_client_config())
+    client_id     = os.environ.get("GOOGLE_CLIENT_ID", "")
+    client_secret = os.environ.get("GOOGLE_CLIENT_SECRET", "")
+    return render_template(
+        "setup_credentials.html",
+        configured=configured,
+        client_id=client_id,
+        client_secret=client_secret,
+    )
+
+
+@app.route("/save-credentials", methods=["POST"])
+def save_credentials():
+    """Receive Client ID & Secret via JSON, persist them to .env, reload env vars."""
+    data          = request.get_json(force=True) or {}
+    client_id     = (data.get("client_id") or "").strip()
+    client_secret = (data.get("client_secret") or "").strip()
+
+    if not client_id or not client_secret:
+        return jsonify({"success": False, "error": "Both client_id and client_secret are required."}), 400
+
+    env_path = os.path.join(os.path.dirname(__file__), ".env")
+
+    # Read existing .env lines (preserving all other variables)
+    lines = []
+    if os.path.exists(env_path):
+        with open(env_path, "r", encoding="utf-8") as f:
+            lines = f.readlines()
+
+    # Update or append GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET
+    keys_to_set = {
+        "GOOGLE_CLIENT_ID": client_id,
+        "GOOGLE_CLIENT_SECRET": client_secret,
+    }
+    updated = set()
+    new_lines = []
+    for line in lines:
+        stripped = line.strip()
+        matched = False
+        for key in keys_to_set:
+            if stripped.startswith(key + "=") or stripped.startswith("# " + key):
+                new_lines.append(f"{key}={keys_to_set[key]}\n")
+                updated.add(key)
+                matched = True
+                break
+        if not matched:
+            new_lines.append(line)
+
+    for key, val in keys_to_set.items():
+        if key not in updated:
+            new_lines.append(f"{key}={val}\n")
+
+    try:
+        with open(env_path, "w", encoding="utf-8") as f:
+            f.writelines(new_lines)
+    except Exception as e:
+        return jsonify({"success": False, "error": f"Could not write .env file: {e}"}), 500
+
+    # Reload env vars into the running process immediately
+    os.environ["GOOGLE_CLIENT_ID"]     = client_id
+    os.environ["GOOGLE_CLIENT_SECRET"] = client_secret
+
+    return jsonify({"success": True})
 
 
 @app.route("/authorize")
@@ -69,7 +143,7 @@ def authorize():
     from auth_helpers import _get_client_config, CLIENT_SECRETS_FILE
     config = _get_client_config()
     if not config and not os.path.exists(CLIENT_SECRETS_FILE):
-        return render_template("setup.html")
+        return redirect(url_for("setup_credentials"))
 
     flow = build_flow()
     verifier, challenge = _pkce_pair()
@@ -141,4 +215,13 @@ def logout():
 # ─── Run ──────────────────────────────────────────────────────────────────────
 
 if __name__ == "__main__":
+    import threading
+    import webbrowser
+
+    def _open_browser():
+        import time
+        time.sleep(1.2)  # wait for Flask to be ready
+        webbrowser.open("http://localhost:5000/setup-credentials")
+
+    threading.Thread(target=_open_browser, daemon=True).start()
     app.run(debug=True, port=5000, use_reloader=False)

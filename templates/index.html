@@ -184,6 +184,76 @@
     .user-name { font-size: 0.9rem; font-weight: 500; }
     .nav-actions { display: flex; align-items: center; gap: 0.75rem; }
 
+    /* ── Credentials banner (top) ── */
+    .creds-banner {
+      position: relative; z-index: 10;
+      margin-top: 72px; /* below fixed nav */
+      background: linear-gradient(90deg, rgba(255,107,157,0.12), rgba(255,200,0,0.08));
+      border-bottom: 1px solid rgba(255,107,157,0.2);
+      padding: 0.85rem 2rem;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 0.75rem;
+      font-size: 0.88rem; color: #ffb3cc;
+    }
+    .creds-banner.hidden { display: none; }
+    .creds-banner strong { color: #ff6b9d; }
+    .creds-banner a {
+      display: inline-flex; align-items: center; gap: 0.35rem;
+      background: rgba(255,107,157,0.2); border: 1px solid rgba(255,107,157,0.35);
+      color: #ff6b9d; border-radius: 8px; padding: 0.35rem 0.9rem;
+      font-size: 0.82rem; font-weight: 600; text-decoration: none;
+      transition: background 0.2s;
+    }
+    .creds-banner a:hover { background: rgba(255,107,157,0.3); }
+
+    /* ── Setup steps footer section ── */
+    .setup-section {
+      position: relative; z-index: 1;
+      max-width: 900px; margin: 0 auto; padding: 2rem 2rem 5rem;
+      animation: fadeUp 0.9s ease 0.5s both;
+    }
+    .setup-section-title {
+      text-align: center; margin-bottom: 2rem;
+    }
+    .setup-section-title h2 {
+      font-size: 1.6rem; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 0.5rem;
+    }
+    .setup-section-title p { font-size: 0.9rem; color: var(--muted); }
+    .steps-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem;
+    }
+    .step-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 14px; padding: 1.3rem;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .step-card:hover { border-color: rgba(108,99,255,0.3); transform: translateY(-3px); }
+    .step-card-num {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.8rem; font-weight: 800; color: #fff; margin-bottom: 0.9rem;
+    }
+    .step-card h4 { font-size: 0.9rem; font-weight: 700; margin-bottom: 0.35rem; }
+    .step-card p { font-size: 0.8rem; color: var(--muted); line-height: 1.6; }
+    .step-card code {
+      background: rgba(108,99,255,0.13); border: 1px solid rgba(108,99,255,0.25);
+      border-radius: 4px; padding: 0.1em 0.35em; font-size: 0.8em; color: #a89fff;
+      word-break: break-all;
+    }
+    .setup-cta {
+      display: flex; justify-content: center; margin-top: 2rem;
+    }
+    .btn-setup {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.9rem 2rem; border-radius: 12px;
+      background: linear-gradient(135deg, var(--accent), #4c46cc);
+      color: #fff; font-size: 0.95rem; font-weight: 700;
+      text-decoration: none; transition: all 0.2s;
+      box-shadow: 0 4px 20px rgba(108,99,255,0.35);
+    }
+    .btn-setup:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(108,99,255,0.5); }
+
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(20px); }
       to   { opacity: 1; transform: translateY(0); }
@@ -191,6 +261,14 @@
   </style>
 </head>
 <body>
+  <!-- Credentials not configured banner -->
+  {% if not configured %}
+  <div class="creds-banner" id="creds-banner">
+    <span>⚙️ <strong>Setup required:</strong> Google OAuth2 credentials are not yet configured.</span>
+    <a href="/setup-credentials">🔑 Configure Credentials &rarr;</a>
+  </div>
+  {% endif %}
+
   <!-- Background orbs -->
   <div class="bg-orbs">
     <div class="orb orb-1"></div>
@@ -264,6 +342,51 @@
       <p>Gmail OAuth2 so your password is never stored. Credentials live only in your session and are never shared.</p>
     </div>
   </section>
+
+  <!-- Setup steps section at the bottom of the first page -->
+  {% if not configured %}
+  <div class="setup-section" id="get-started">
+    <div class="setup-section-title">
+      <h2>🚀 Get Started in 3 Minutes</h2>
+      <p>Follow these steps to obtain your free Google OAuth2 credentials and connect MailMind.</p>
+    </div>
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-card-num">1</div>
+        <h4>Open Google Cloud Console</h4>
+        <p>Visit <a href="https://console.cloud.google.com/" target="_blank" style="color:var(--accent2);text-decoration:none;">console.cloud.google.com</a> and create a new project called "MailMind".</p>
+      </div>
+      <div class="step-card">
+        <div class="step-card-num">2</div>
+        <h4>Enable Gmail API</h4>
+        <p>Go to <strong>APIs &amp; Services &rarr; Library</strong>, search <strong>Gmail API</strong> and click <strong>Enable</strong>.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-card-num">3</div>
+        <h4>Configure Consent Screen</h4>
+        <p>Go to <strong>OAuth consent screen</strong>, choose <strong>External</strong>, fill in your app name and support email.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-card-num">4</div>
+        <h4>Create OAuth Client ID</h4>
+        <p>Go to <strong>Credentials &rarr; Create Credentials &rarr; OAuth 2.0 Client ID</strong>. Type: <strong>Web application</strong>.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-card-num">5</div>
+        <h4>Add Redirect URI</h4>
+        <p>Under Authorized redirect URIs add:<br/><code>http://localhost:5000/oauth2callback</code></p>
+      </div>
+      <div class="step-card">
+        <div class="step-card-num">6</div>
+        <h4>Paste into Setup Page</h4>
+        <p>Copy your <strong>Client ID</strong> and <strong>Client Secret</strong> and paste them into the MailMind setup page — done!</p>
+      </div>
+    </div>
+    <div class="setup-cta">
+      <a href="/setup-credentials" class="btn-setup">🔑 Open Credentials Setup &rarr;</a>
+    </div>
+  </div>
+  {% endif %}
 
   <!-- Setup notice if credentials.json missing -->
   <div class="setup-notice" id="setup-warn" style="display:none;">

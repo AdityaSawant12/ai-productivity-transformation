@@ -1,22 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Dashboard – MailMind</title>
   <meta name="description" content="AI-powered Gmail summary dashboard" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet" />
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
     :root {
       --bg: #09090f;
       --surface: #13131f;
       --surface2: #1c1c2e;
       --surface3: #22223a;
-      --border: rgba(255,255,255,0.07);
-      --border2: rgba(255,255,255,0.12);
+      --border: rgba(255, 255, 255, 0.07);
+      --border2: rgba(255, 255, 255, 0.12);
       --accent: #6c63ff;
       --accent2: #00d4ff;
       --accent3: #ff6b9d;
@@ -33,47 +41,123 @@
       background: var(--bg);
       color: var(--text);
       min-height: 100vh;
-      display: flex; flex-direction: column;
+      display: flex;
+      flex-direction: column;
     }
 
     /* Scrollbar */
-    ::-webkit-scrollbar { width: 6px; }
-    ::-webkit-scrollbar-track { background: var(--surface); }
-    ::-webkit-scrollbar-thumb { background: var(--surface3); border-radius: 3px; }
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--surface);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--surface3);
+      border-radius: 3px;
+    }
 
     /* ── Top Nav ── */
     .topnav {
-      display: flex; align-items: center; justify-content: space-between;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       padding: 0.85rem 1.5rem;
       background: var(--surface);
       border-bottom: 1px solid var(--border);
-      position: sticky; top: 0; z-index: 50;
+      position: sticky;
+      top: 0;
+      z-index: 50;
     }
-    .logo {
-      display: flex; align-items: center; gap: 0.5rem;
-      font-size: 1.15rem; font-weight: 800; letter-spacing: -0.4px; text-decoration: none;
-    }
-    .logo-icon { width: 32px; height: 32px; border-radius: 9px; background: linear-gradient(135deg, var(--accent), var(--accent2)); display: flex; align-items: center; justify-content: center; font-size: 1rem; }
-    .logo span { background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-    .user-info { display: flex; align-items: center; gap: 0.75rem; }
-    .avatar { width: 36px; height: 36px; border-radius: 50%; border: 2px solid var(--accent); object-fit: cover; }
-    .user-name { font-size: 0.88rem; font-weight: 500; color: var(--text); }
-    .user-email { font-size: 0.75rem; color: var(--muted); }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 1.15rem;
+      font-weight: 800;
+      letter-spacing: -0.4px;
+      text-decoration: none;
+    }
+
+    .logo-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 9px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+    }
+
+    .logo span {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 2px solid var(--accent);
+      object-fit: cover;
+    }
+
+    .user-name {
+      font-size: 0.88rem;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    .user-email {
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
 
     .nav-btn {
-      display: inline-flex; align-items: center; gap: 0.35rem;
-      padding: 0.5rem 0.9rem; border-radius: 8px; border: none;
-      font-family: 'Inter', sans-serif; font-size: 0.82rem; font-weight: 500;
-      cursor: pointer; transition: all 0.15s; text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.5rem 0.9rem;
+      border-radius: 8px;
+      border: none;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s;
+      text-decoration: none;
     }
-    .nav-btn-ghost { background: transparent; color: var(--muted); }
-    .nav-btn-ghost:hover { background: var(--surface2); color: var(--text); }
+
+    .nav-btn-ghost {
+      background: transparent;
+      color: var(--muted);
+    }
+
+    .nav-btn-ghost:hover {
+      background: var(--surface2);
+      color: var(--text);
+    }
 
     /* ── Layout ── */
     .layout {
-      display: grid; grid-template-columns: 280px 1fr;
-      flex: 1; min-height: 0; max-width: 1400px; margin: 0 auto; width: 100%;
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      flex: 1;
+      min-height: 0;
+      max-width: 1400px;
+      margin: 0 auto;
+      width: 100%;
     }
 
     /* ── Sidebar ── */
@@ -81,925 +165,1687 @@
       background: var(--surface);
       border-right: 1px solid var(--border);
       padding: 1.25rem;
-      display: flex; flex-direction: column; gap: 1.25rem;
-      position: sticky; top: 58px;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      position: sticky;
+      top: 58px;
       height: calc(100vh - 58px);
       overflow-y: auto;
     }
 
     .section-label {
-      font-size: 0.7rem; font-weight: 600; letter-spacing: 0.8px;
-      text-transform: uppercase; color: var(--muted2);
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      color: var(--muted2);
       margin-bottom: 0.4rem;
     }
 
     /* Stats */
-    .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; }
-    .stat-card {
-      background: var(--surface2); border: 1px solid var(--border);
-      border-radius: 10px; padding: 0.8rem;
-      display: flex; flex-direction: column; gap: 0.2rem;
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.6rem;
     }
-    .stat-val { font-size: 1.5rem; font-weight: 700; line-height: 1; }
-    .stat-lbl { font-size: 0.72rem; color: var(--muted); }
-    .stat-accent { color: var(--accent); }
-    .stat-success { color: var(--success); }
+
+    .stat-card {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0.8rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+
+    .stat-val {
+      font-size: 1.5rem;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .stat-lbl {
+      font-size: 0.72rem;
+      color: var(--muted);
+    }
+
+    .stat-accent {
+      color: var(--accent);
+    }
+
+    .stat-success {
+      color: var(--success);
+    }
 
     /* Control Panel */
-    .ctrl-panel { display: flex; flex-direction: column; gap: 0.6rem; }
-
-    .input-group { display: flex; flex-direction: column; gap: 0.3rem; }
-    .ctrl-label { font-size: 0.75rem; color: var(--muted); font-weight: 500; }
-    .ctrl-input, .ctrl-select {
-      width: 100%; padding: 0.55rem 0.8rem;
-      background: var(--surface2); border: 1px solid var(--border2);
-      border-radius: 8px; color: var(--text);
-      font-family: 'Inter', sans-serif; font-size: 0.85rem;
-      outline: none; transition: border-color 0.15s;
+    .ctrl-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
     }
-    .ctrl-input:focus, .ctrl-select:focus { border-color: var(--accent); }
-    .ctrl-select option { background: var(--surface2); }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+
+    .ctrl-label {
+      font-size: 0.75rem;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    .ctrl-input,
+    .ctrl-select {
+      width: 100%;
+      padding: 0.55rem 0.8rem;
+      background: var(--surface2);
+      border: 1px solid var(--border2);
+      border-radius: 8px;
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.85rem;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+
+    .ctrl-input:focus,
+    .ctrl-select:focus {
+      border-color: var(--accent);
+    }
+
+    .ctrl-select option {
+      background: var(--surface2);
+    }
 
     .btn {
-      display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem;
-      padding: 0.6rem 1rem; border-radius: 9px; border: none;
-      font-family: 'Inter', sans-serif; font-size: 0.85rem; font-weight: 600;
-      cursor: pointer; transition: all 0.15s; width: 100%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      padding: 0.6rem 1rem;
+      border-radius: 9px;
+      border: none;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+      width: 100%;
     }
-    .btn-primary { background: linear-gradient(135deg, var(--accent), #4c46cc); color: #fff; box-shadow: 0 3px 12px rgba(108,99,255,0.3); }
-    .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(108,99,255,0.4); }
-    .btn-primary:active { transform: translateY(0); }
-    .btn-success { background: rgba(0,229,160,0.15); color: var(--success); border: 1px solid rgba(0,229,160,0.3); }
-    .btn-success:hover { background: rgba(0,229,160,0.25); }
-    .btn-danger { background: rgba(255,107,107,0.12); color: var(--danger); border: 1px solid rgba(255,107,107,0.25); }
-    .btn-danger:hover { background: rgba(255,107,107,0.22); }
-    .btn-ghost { background: var(--surface2); color: var(--muted); border: 1px solid var(--border); }
-    .btn-ghost:hover { color: var(--text); background: var(--surface3); }
-    .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent), #4c46cc);
+      color: #fff;
+      box-shadow: 0 3px 12px rgba(108, 99, 255, 0.3);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(108, 99, 255, 0.4);
+    }
+
+    .btn-primary:active {
+      transform: translateY(0);
+    }
+
+    .btn-success {
+      background: rgba(0, 229, 160, 0.15);
+      color: var(--success);
+      border: 1px solid rgba(0, 229, 160, 0.3);
+    }
+
+    .btn-success:hover {
+      background: rgba(0, 229, 160, 0.25);
+    }
+
+    .btn-danger {
+      background: rgba(255, 107, 107, 0.12);
+      color: var(--danger);
+      border: 1px solid rgba(255, 107, 107, 0.25);
+    }
+
+    .btn-danger:hover {
+      background: rgba(255, 107, 107, 0.22);
+    }
+
+    .btn-ghost {
+      background: var(--surface2);
+      color: var(--muted);
+      border: 1px solid var(--border);
+    }
+
+    .btn-ghost:hover {
+      color: var(--text);
+      background: var(--surface3);
+    }
+
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none !important;
+    }
 
     /* Poll status */
     .poll-status {
-      display: flex; align-items: center; gap: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
       padding: 0.55rem 0.8rem;
-      border-radius: 8px; font-size: 0.8rem; font-weight: 500;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-weight: 500;
     }
-    .poll-dot { width: 7px; height: 7px; border-radius: 50%; }
-    .poll-active   { background: rgba(0,229,160,0.12); color: var(--success); }
-    .poll-active .poll-dot   { background: var(--success); animation: pulse 1.5s infinite; }
-    .poll-inactive { background: var(--surface2); color: var(--muted); }
-    .poll-inactive .poll-dot { background: var(--muted2); }
 
-    @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.3; } }
+    .poll-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+    }
+
+    .poll-active {
+      background: rgba(0, 229, 160, 0.12);
+      color: var(--success);
+    }
+
+    .poll-active .poll-dot {
+      background: var(--success);
+      animation: pulse 1.5s infinite;
+    }
+
+    .poll-inactive {
+      background: var(--surface2);
+      color: var(--muted);
+    }
+
+    .poll-inactive .poll-dot {
+      background: var(--muted2);
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0.3;
+      }
+    }
 
     /* Gemini key section */
-    .key-section { display: flex; flex-direction: column; gap: 0.5rem; }
-    .key-input-row { display: flex; gap: 0.4rem; }
-    .key-input-row .ctrl-input { flex: 1; }
-    .key-input-row .btn { width: auto; padding: 0.55rem 0.7rem; font-size: 0.78rem; }
-    .key-status { font-size: 0.72rem; color: var(--muted); }
-    .key-status.ok { color: var(--success); }
-    .key-status.err { color: var(--danger); }
+    .key-section {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .key-input-row {
+      display: flex;
+      gap: 0.4rem;
+    }
+
+    .key-input-row .ctrl-input {
+      flex: 1;
+    }
+
+    .key-input-row .btn {
+      width: auto;
+      padding: 0.55rem 0.7rem;
+      font-size: 0.78rem;
+    }
+
+    .key-status {
+      font-size: 0.72rem;
+      color: var(--muted);
+    }
+
+    .key-status.ok {
+      color: var(--success);
+    }
+
+    .key-status.err {
+      color: var(--danger);
+    }
 
     /* ── Main Content ── */
     .main {
-      flex: 1; display: flex; flex-direction: column;
-      padding: 1.5rem; gap: 1rem; overflow-y: auto;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 1.5rem;
+      gap: 1rem;
+      overflow-y: auto;
       height: calc(100vh - 58px);
     }
 
     .main-header {
-      display: flex; align-items: center; justify-content: space-between;
-      flex-wrap: wrap; gap: 0.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.75rem;
     }
-    .main-title { font-size: 1.2rem; font-weight: 700; }
-    .main-sub { font-size: 0.82rem; color: var(--muted); margin-top: 0.15rem; }
+
+    .main-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+    }
+
+    .main-sub {
+      font-size: 0.82rem;
+      color: var(--muted);
+      margin-top: 0.15rem;
+    }
 
     .filter-bar {
-      display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      flex-wrap: wrap;
     }
+
     .search-box {
-      display: flex; align-items: center; gap: 0.4rem;
-      background: var(--surface); border: 1px solid var(--border2);
-      border-radius: 9px; padding: 0.45rem 0.8rem;
-      flex: 1; min-width: 180px; max-width: 340px;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: var(--surface);
+      border: 1px solid var(--border2);
+      border-radius: 9px;
+      padding: 0.45rem 0.8rem;
+      flex: 1;
+      min-width: 180px;
+      max-width: 340px;
     }
+
     .search-box input {
-      background: none; border: none; outline: none;
-      color: var(--text); font-family: 'Inter', sans-serif;
-      font-size: 0.85rem; width: 100%;
+      background: none;
+      border: none;
+      outline: none;
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.85rem;
+      width: 100%;
     }
-    .search-icon { color: var(--muted); font-size: 0.9rem; }
+
+    .search-icon {
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
 
     .sort-select {
-      background: var(--surface); border: 1px solid var(--border2);
-      color: var(--text); border-radius: 9px; padding: 0.45rem 0.7rem;
-      font-family: 'Inter', sans-serif; font-size: 0.82rem; outline: none;
+      background: var(--surface);
+      border: 1px solid var(--border2);
+      color: var(--text);
+      border-radius: 9px;
+      padding: 0.45rem 0.7rem;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.82rem;
+      outline: none;
       cursor: pointer;
     }
 
     /* Toast */
-    .toast-container { position: fixed; top: 70px; right: 1.5rem; z-index: 200; display: flex; flex-direction: column; gap: 0.5rem; }
-    .toast {
-      padding: 0.7rem 1.1rem; border-radius: 10px;
-      font-size: 0.85rem; font-weight: 500;
-      border: 1px solid;
-      display: flex; align-items: center; gap: 0.5rem;
-      animation: slideIn 0.25s ease;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    .toast-container {
+      position: fixed;
+      top: 70px;
+      right: 1.5rem;
+      z-index: 200;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
     }
-    .toast-info    { background: rgba(108,99,255,0.15); border-color: rgba(108,99,255,0.35); color: #a89fff; }
-    .toast-success { background: rgba(0,229,160,0.12); border-color: rgba(0,229,160,0.35); color: var(--success); }
-    .toast-error   { background: rgba(255,107,107,0.12); border-color: rgba(255,107,107,0.35); color: var(--danger); }
-    @keyframes slideIn { from { opacity:0; transform:translateX(20px); } to { opacity:1; transform:translateX(0); } }
+
+    .toast {
+      padding: 0.7rem 1.1rem;
+      border-radius: 10px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      border: 1px solid;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      animation: slideIn 0.25s ease;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    }
+
+    .toast-info {
+      background: rgba(108, 99, 255, 0.15);
+      border-color: rgba(108, 99, 255, 0.35);
+      color: #a89fff;
+    }
+
+    .toast-success {
+      background: rgba(0, 229, 160, 0.12);
+      border-color: rgba(0, 229, 160, 0.35);
+      color: var(--success);
+    }
+
+    .toast-error {
+      background: rgba(255, 107, 107, 0.12);
+      border-color: rgba(255, 107, 107, 0.35);
+      color: var(--danger);
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateX(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
 
     /* ── Email Cards ── */
-    .email-grid { display: flex; flex-direction: column; gap: 0.75rem; }
+    .email-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
 
     .email-card {
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: 14px; overflow: hidden;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
       transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s;
       animation: cardIn 0.3s ease both;
     }
-    .email-card:hover { border-color: rgba(108,99,255,0.3); box-shadow: 0 6px 30px rgba(108,99,255,0.08); transform: translateY(-1px); }
 
-    @keyframes cardIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+    .email-card:hover {
+      border-color: rgba(108, 99, 255, 0.3);
+      box-shadow: 0 6px 30px rgba(108, 99, 255, 0.08);
+      transform: translateY(-1px);
+    }
+
+    @keyframes cardIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
 
     .card-header {
-      display: flex; align-items: flex-start; justify-content: space-between;
-      padding: 1rem 1.2rem 0.8rem; gap: 0.75rem; cursor: pointer;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      padding: 1rem 1.2rem 0.8rem;
+      gap: 0.75rem;
+      cursor: pointer;
     }
-    .card-meta { flex: 1; min-width: 0; }
+
+    .card-meta {
+      flex: 1;
+      min-width: 0;
+    }
+
     .card-subject {
-      font-size: 0.95rem; font-weight: 600; line-height: 1.3;
-      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      font-size: 0.95rem;
+      font-weight: 600;
+      line-height: 1.3;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
       margin-bottom: 0.3rem;
     }
-    .card-from { font-size: 0.78rem; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .card-date { font-size: 0.75rem; color: var(--muted2); white-space: nowrap; }
 
-    .card-tags { display: flex; align-items: center; gap: 0.35rem; flex-shrink: 0; }
-    .tag {
-      display: inline-flex; align-items: center; gap: 0.2rem;
-      padding: 0.2rem 0.55rem; border-radius: 100px;
-      font-size: 0.7rem; font-weight: 500;
+    .card-from {
+      font-size: 0.78rem;
+      color: var(--muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
-    .tag-att { background: rgba(0,212,255,0.1); color: var(--accent2); border: 1px solid rgba(0,212,255,0.2); }
-    .tag-new { background: rgba(0,229,160,0.1); color: var(--success); border: 1px solid rgba(0,229,160,0.2); }
 
-    .expand-icon { color: var(--muted); font-size: 0.9rem; transition: transform 0.2s; flex-shrink: 0; margin-top: 0.1rem; }
-    .email-card.expanded .expand-icon { transform: rotate(180deg); }
+    .card-date {
+      font-size: 0.75rem;
+      color: var(--muted2);
+      white-space: nowrap;
+    }
+
+    .card-tags {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      flex-shrink: 0;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.2rem;
+      padding: 0.2rem 0.55rem;
+      border-radius: 100px;
+      font-size: 0.7rem;
+      font-weight: 500;
+    }
+
+    .tag-att {
+      background: rgba(0, 212, 255, 0.1);
+      color: var(--accent2);
+      border: 1px solid rgba(0, 212, 255, 0.2);
+    }
+
+    .tag-new {
+      background: rgba(0, 229, 160, 0.1);
+      color: var(--success);
+      border: 1px solid rgba(0, 229, 160, 0.2);
+    }
+
+    .expand-icon {
+      color: var(--muted);
+      font-size: 0.9rem;
+      transition: transform 0.2s;
+      flex-shrink: 0;
+      margin-top: 0.1rem;
+    }
+
+    .email-card.expanded .expand-icon {
+      transform: rotate(180deg);
+    }
 
     /* Summary body */
     .card-body {
-      max-height: 0; overflow: hidden;
-      transition: max-height 0.4s cubic-bezier(0.4,0,0.2,1);
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
       border-top: 0 solid var(--border);
     }
+
     .email-card.expanded .card-body {
       max-height: 2000px;
       border-top-width: 1px;
     }
+
     .card-body-inner {
       padding: 1rem 1.2rem 1.2rem;
     }
 
     /* Markdown-like summary rendering */
-    .summary-content { font-size: 0.88rem; line-height: 1.75; color: #c8c8de; }
-    .summary-content h2 { font-size: 0.9rem; font-weight: 700; color: var(--text); margin: 0.9rem 0 0.3rem; }
-    .summary-content h3 { font-size: 0.85rem; font-weight: 600; color: #a89fff; margin: 0.7rem 0 0.25rem; }
-    .summary-content ul, .summary-content ol { margin-left: 1.2rem; margin-bottom: 0.4rem; }
-    .summary-content li { margin-bottom: 0.2rem; }
-    .summary-content strong { color: var(--text); font-weight: 600; }
-    .summary-content p { margin-bottom: 0.4rem; }
-    .summary-content code { background: rgba(108,99,255,0.15); border-radius: 4px; padding: 0.1em 0.35em; font-size: 0.82em; }
+    .summary-content {
+      font-size: 0.88rem;
+      line-height: 1.75;
+      color: #c8c8de;
+    }
+
+    .summary-content h2 {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--text);
+      margin: 0.9rem 0 0.3rem;
+    }
+
+    .summary-content h3 {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #a89fff;
+      margin: 0.7rem 0 0.25rem;
+    }
+
+    .summary-content ul,
+    .summary-content ol {
+      margin-left: 1.2rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .summary-content li {
+      margin-bottom: 0.2rem;
+    }
+
+    .summary-content strong {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .summary-content p {
+      margin-bottom: 0.4rem;
+    }
+
+    .summary-content code {
+      background: rgba(108, 99, 255, 0.15);
+      border-radius: 4px;
+      padding: 0.1em 0.35em;
+      font-size: 0.82em;
+    }
 
     /* Attachment chips */
-    .att-chips { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.75rem; }
-    .att-chip {
-      display: inline-flex; align-items: center; gap: 0.3rem;
-      background: var(--surface2); border: 1px solid var(--border2);
-      border-radius: 6px; padding: 0.25rem 0.6rem;
-      font-size: 0.72rem; color: var(--muted);
+    .att-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-top: 0.75rem;
     }
+
+    .att-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      background: var(--surface2);
+      border: 1px solid var(--border2);
+      border-radius: 6px;
+      padding: 0.25rem 0.6rem;
+      font-size: 0.72rem;
+      color: var(--muted);
+    }
+
+    /* Attachment summary dropdown */
+    .att-summary-row {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 0.75rem;
+      cursor: pointer;
+      user-select: none;
+      width: fit-content;
+      padding: 0.35rem 0.75rem;
+      border-radius: 8px;
+      background: rgba(0,212,255,0.07);
+      border: 1px solid rgba(0,212,255,0.18);
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .att-summary-row:hover { background: rgba(0,212,255,0.13); border-color: rgba(0,212,255,0.3); }
+    .att-summary-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #80d8f0;
+      letter-spacing: 0.3px;
+    }
+    .att-summary-chevron {
+      font-size: 0.7rem;
+      color: #80d8f0;
+      transition: transform 0.25s ease;
+      line-height: 1;
+    }
+    .att-summary-row.open .att-summary-chevron { transform: rotate(180deg); }
+    .att-summary-panel {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease, opacity 0.3s ease;
+      opacity: 0;
+    }
+    .att-summary-panel.open {
+      max-height: 2000px;
+      opacity: 1;
+    }
+    .att-summary-inner {
+      background: rgba(0,212,255,0.04);
+      border: 1px solid rgba(0,212,255,0.13);
+      border-radius: 10px;
+      padding: 1rem 1.1rem;
+      margin-top: 0.6rem;
+      font-size: 0.83rem;
+      color: var(--muted);
+      line-height: 1.75;
+    }
+    .att-summary-inner p  { margin-bottom: 0.5rem; }
+    .att-summary-inner ul { margin-left: 1.2rem; margin-bottom: 0.5rem; }
+    .att-summary-inner h1,.att-summary-inner h2,.att-summary-inner h3 {
+      color: var(--text); font-size: 0.88rem; font-weight: 700;
+      margin: 0.75rem 0 0.3rem;
+    }
+    .att-summary-inner strong { color: var(--text); }
+    .att-loading {
+      display: flex; align-items: center; gap: 0.6rem;
+      padding: 1rem; font-size: 0.82rem; color: #80d8f0;
+    }
+    .att-spinner {
+      width: 16px; height: 16px;
+      border: 2px solid rgba(0,212,255,0.25);
+      border-top-color: #00d4ff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      flex-shrink: 0;
+    }
+    .att-error { color: var(--error); font-size: 0.82rem; padding: 0.75rem; }
 
     /* Empty state */
     .empty-state {
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      gap: 1rem; padding: 5rem 2rem; text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      padding: 5rem 2rem;
+      text-align: center;
     }
-    .empty-icon { font-size: 3.5rem; opacity: 0.4; }
-    .empty-title { font-size: 1.1rem; font-weight: 600; color: var(--muted); }
-    .empty-sub { font-size: 0.85rem; color: var(--muted2); max-width: 280px; line-height: 1.6; }
+
+    .empty-icon {
+      font-size: 3.5rem;
+      opacity: 0.4;
+    }
+
+    .empty-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--muted);
+    }
+
+    .empty-sub {
+      font-size: 0.85rem;
+      color: var(--muted2);
+      max-width: 280px;
+      line-height: 1.6;
+    }
 
     /* Loading shimmer */
     .shimmer-card {
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: 14px; padding: 1rem 1.2rem;
-      display: flex; flex-direction: column; gap: 0.6rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1rem 1.2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
     }
+
     .shimmer-line {
-      height: 12px; border-radius: 6px;
+      height: 12px;
+      border-radius: 6px;
       background: linear-gradient(90deg, var(--surface2) 25%, var(--surface3) 50%, var(--surface2) 75%);
       background-size: 200% 100%;
       animation: shimmer 1.5s infinite;
     }
-    @keyframes shimmer { from { background-position: 200% 0; } to { background-position: -200% 0; } }
+
+    @keyframes shimmer {
+      from {
+        background-position: 200% 0;
+      }
+
+      to {
+        background-position: -200% 0;
+      }
+    }
 
     /* Responsive */
     @media (max-width: 860px) {
-      .layout { grid-template-columns: 1fr; }
-      .sidebar { position: static; height: auto; border-right: none; border-bottom: 1px solid var(--border); }
-      .main { height: auto; }
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        position: static;
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .main {
+        height: auto;
+      }
     }
 
     /* ── Draft Reply Button ── */
-    .draft-action-bar { margin-top: 1rem; padding-top: 0.75rem; border-top: 1px solid var(--border); }
-    .btn-draft-reply {
-      display: inline-flex; align-items: center; gap: 0.4rem;
-      padding: 0.5rem 1rem; border-radius: 8px; border: 1px solid rgba(108,99,255,0.35);
-      background: rgba(108,99,255,0.1); color: #a89fff;
-      font-family: 'Inter', sans-serif; font-size: 0.82rem; font-weight: 500;
-      cursor: pointer; transition: all 0.15s;
+    .draft-action-bar {
+      margin-top: 1rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--border);
     }
-    .btn-draft-reply:hover { background: rgba(108,99,255,0.2); border-color: rgba(108,99,255,0.6); }
+
+    .btn-draft-reply {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      border: 1px solid rgba(108, 99, 255, 0.35);
+      background: rgba(108, 99, 255, 0.1);
+      color: #a89fff;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .btn-draft-reply:hover {
+      background: rgba(108, 99, 255, 0.2);
+      border-color: rgba(108, 99, 255, 0.6);
+    }
 
     /* ── Compose Modal Overlay ── */
     .compose-overlay {
       display: none;
-      position: fixed; inset: 0; z-index: 300;
-      background: rgba(0,0,0,0.55);
+      position: fixed;
+      inset: 0;
+      z-index: 300;
+      background: rgba(0, 0, 0, 0.55);
       backdrop-filter: blur(4px);
-      align-items: flex-end; justify-content: flex-end;
+      align-items: flex-end;
+      justify-content: flex-end;
       padding: 1.5rem;
     }
-    .compose-overlay.open { display: flex; }
+
+    .compose-overlay.open {
+      display: flex;
+    }
 
     .compose-window {
-      width: 580px; max-width: calc(100vw - 2rem);
+      width: 580px;
+      max-width: calc(100vw - 2rem);
       background: var(--surface);
       border: 1px solid var(--border2);
       border-radius: 16px;
-      box-shadow: 0 24px 80px rgba(0,0,0,0.7), 0 0 0 1px rgba(108,99,255,0.15);
-      display: flex; flex-direction: column;
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(108, 99, 255, 0.15);
+      display: flex;
+      flex-direction: column;
       max-height: calc(100vh - 3rem);
-      animation: composeIn 0.25s cubic-bezier(0.34,1.56,0.64,1);
+      animation: composeIn 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
-    @keyframes composeIn { from { opacity:0; transform:translateY(30px) scale(0.97); } to { opacity:1; transform:none; } }
+
+    @keyframes composeIn {
+      from {
+        opacity: 0;
+        transform: translateY(30px) scale(0.97);
+      }
+
+      to {
+        opacity: 1;
+        transform: none;
+      }
+    }
 
     /* Compose header */
     .compose-header {
-      display: flex; align-items: center; justify-content: space-between;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       padding: 0.85rem 1.1rem;
-      background: linear-gradient(135deg, rgba(108,99,255,0.2), rgba(0,212,255,0.08));
+      background: linear-gradient(135deg, rgba(108, 99, 255, 0.2), rgba(0, 212, 255, 0.08));
       border-bottom: 1px solid var(--border);
       border-radius: 16px 16px 0 0;
     }
-    .compose-title { font-size: 0.9rem; font-weight: 700; color: var(--text); display:flex; align-items:center; gap:.5rem; }
-    .compose-title-badge { font-size:0.7rem; background:rgba(108,99,255,0.25); color:#a89fff; padding:.15rem .5rem; border-radius:100px; font-weight:600; }
-    .compose-hdr-btns { display:flex; gap:0.4rem; }
+
+    .compose-title {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+
+    .compose-title-badge {
+      font-size: 0.7rem;
+      background: rgba(108, 99, 255, 0.25);
+      color: #a89fff;
+      padding: .15rem .5rem;
+      border-radius: 100px;
+      font-weight: 600;
+    }
+
+    .compose-hdr-btns {
+      display: flex;
+      gap: 0.4rem;
+    }
+
     .compose-hdr-btn {
-      width: 28px; height: 28px; border-radius: 8px; border: none;
-      background: var(--surface2); color: var(--muted);
-      cursor: pointer; font-size: 0.85rem;
-      display:flex; align-items:center; justify-content:center;
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      border: none;
+      background: var(--surface2);
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       transition: all 0.15s;
     }
-    .compose-hdr-btn:hover { background: var(--surface3); color: var(--text); }
-    .compose-hdr-btn.danger:hover { background: rgba(255,107,107,0.2); color: var(--danger); }
+
+    .compose-hdr-btn:hover {
+      background: var(--surface3);
+      color: var(--text);
+    }
+
+    .compose-hdr-btn.danger:hover {
+      background: rgba(255, 107, 107, 0.2);
+      color: var(--danger);
+    }
 
     /* Recipient rows */
-    .compose-fields { display:flex; flex-direction:column; border-bottom: 1px solid var(--border); }
+    .compose-fields {
+      display: flex;
+      flex-direction: column;
+      border-bottom: 1px solid var(--border);
+    }
+
     .field-row {
-      display: flex; align-items: flex-start;
-      padding: 0.55rem 1rem; gap: 0.5rem;
+      display: flex;
+      align-items: flex-start;
+      padding: 0.55rem 1rem;
+      gap: 0.5rem;
       border-bottom: 1px solid var(--border);
       min-height: 40px;
     }
-    .field-row:last-child { border-bottom: none; }
-    .field-label { font-size: 0.75rem; font-weight: 600; color: var(--muted); min-width: 36px; padding-top: 0.3rem; }
+
+    .field-row:last-child {
+      border-bottom: none;
+    }
+
+    .field-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--muted);
+      min-width: 36px;
+      padding-top: 0.3rem;
+    }
+
     .chips-input {
-      display: flex; flex-wrap: wrap; align-items: center; gap: 0.35rem;
-      flex: 1; min-width: 0;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.35rem;
+      flex: 1;
+      min-width: 0;
     }
+
     .chip {
-      display: inline-flex; align-items: center; gap: 0.3rem;
-      background: rgba(108,99,255,0.18); border: 1px solid rgba(108,99,255,0.3);
-      border-radius: 100px; padding: 0.15rem 0.55rem 0.15rem 0.7rem;
-      font-size: 0.78rem; color: #c4bfff;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      background: rgba(108, 99, 255, 0.18);
+      border: 1px solid rgba(108, 99, 255, 0.3);
+      border-radius: 100px;
+      padding: 0.15rem 0.55rem 0.15rem 0.7rem;
+      font-size: 0.78rem;
+      color: #c4bfff;
     }
+
     .chip-del {
-      cursor: pointer; color: var(--muted2); font-size: 0.8rem; line-height: 1;
-      background: none; border: none; padding: 0; margin-left: 0.1rem;
+      cursor: pointer;
+      color: var(--muted2);
+      font-size: 0.8rem;
+      line-height: 1;
+      background: none;
+      border: none;
+      padding: 0;
+      margin-left: 0.1rem;
     }
-    .chip-del:hover { color: var(--danger); }
+
+    .chip-del:hover {
+      color: var(--danger);
+    }
+
     .chips-input input {
-      background: none; border: none; outline: none;
-      color: var(--text); font-family: 'Inter', sans-serif;
-      font-size: 0.85rem; min-width: 120px; flex: 1;
+      background: none;
+      border: none;
+      outline: none;
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.85rem;
+      min-width: 120px;
+      flex: 1;
     }
-    .field-row-extra { display:flex; align-items:center; gap:0.4rem; }
-    .toggle-cc { font-size:0.72rem; color:var(--muted); cursor:pointer; padding:.15rem .4rem; border-radius:4px; background:none; border:none; font-family:'Inter',sans-serif; }
-    .toggle-cc:hover { color:var(--accent); }
+
+    .field-row-extra {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .toggle-cc {
+      font-size: 0.72rem;
+      color: var(--muted);
+      cursor: pointer;
+      padding: .15rem .4rem;
+      border-radius: 4px;
+      background: none;
+      border: none;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .toggle-cc:hover {
+      color: var(--accent);
+    }
+
     .subject-input {
-      background: none; border: none; outline: none;
-      color: var(--text); font-family: 'Inter', sans-serif;
-      font-size: 0.88rem; font-weight: 500; width: 100%; flex:1;
+      background: none;
+      border: none;
+      outline: none;
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 500;
+      width: 100%;
+      flex: 1;
     }
-    .subject-input::placeholder { color: var(--muted2); }
+
+    .subject-input::placeholder {
+      color: var(--muted2);
+    }
 
     /* Body */
     .compose-body {
-      flex: 1; overflow-y: auto;
+      flex: 1;
+      overflow-y: auto;
       padding: 1rem;
       position: relative;
-      min-height: 220px; max-height: 360px;
+      min-height: 220px;
+      max-height: 360px;
     }
+
     .compose-textarea {
-      width: 100%; height: 100%; min-height: 200px;
-      background: none; border: none; outline: none; resize: none;
-      color: var(--text); font-family: 'Inter', sans-serif;
-      font-size: 0.875rem; line-height: 1.7;
+      width: 100%;
+      height: 100%;
+      min-height: 200px;
+      background: none;
+      border: none;
+      outline: none;
+      resize: none;
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.875rem;
+      line-height: 1.7;
     }
-    .compose-textarea::placeholder { color: var(--muted2); }
+
+    .compose-textarea::placeholder {
+      color: var(--muted2);
+    }
 
     /* Loading overlay inside body */
     .compose-loading {
-      display: none; position: absolute; inset: 0;
-      align-items: center; justify-content: center; flex-direction: column; gap: 0.75rem;
+      display: none;
+      position: absolute;
+      inset: 0;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 0.75rem;
       background: var(--surface);
       border-radius: 0 0 16px 16px;
     }
-    .compose-loading.show { display: flex; }
+
+    .compose-loading.show {
+      display: flex;
+    }
+
     .compose-spin {
-      width: 36px; height: 36px; border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
       border: 3px solid var(--surface3);
       border-top-color: var(--accent);
       animation: spin 0.8s linear infinite;
     }
-    .compose-load-text { font-size: 0.82rem; color: var(--muted); }
+
+    .compose-load-text {
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
 
     /* Footer */
     .compose-footer {
-      display: flex; align-items: center; justify-content: space-between;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       padding: 0.75rem 1rem;
       border-top: 1px solid var(--border);
       gap: 0.5rem;
     }
-    .compose-footer-left { display:flex; gap:0.5rem; }
+
+    .compose-footer-left {
+      display: flex;
+      gap: 0.5rem;
+    }
+
     .compose-send-btn {
-      display: inline-flex; align-items: center; gap: 0.4rem;
-      padding: 0.55rem 1.25rem; border-radius: 9px; border: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.55rem 1.25rem;
+      border-radius: 9px;
+      border: none;
       background: linear-gradient(135deg, var(--accent), #4c46cc);
-      color: #fff; font-family: 'Inter', sans-serif;
-      font-size: 0.85rem; font-weight: 600;
-      cursor: pointer; transition: all 0.15s;
-      box-shadow: 0 3px 12px rgba(108,99,255,0.35);
+      color: #fff;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+      box-shadow: 0 3px 12px rgba(108, 99, 255, 0.35);
     }
-    .compose-send-btn:hover { transform:translateY(-1px); box-shadow:0 6px 20px rgba(108,99,255,0.5); }
-    .compose-send-btn:disabled { opacity:0.5; cursor:not-allowed; transform:none; }
+
+    .compose-send-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(108, 99, 255, 0.5);
+    }
+
+    .compose-send-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
     .compose-draft-btn {
-      display: inline-flex; align-items: center; gap: 0.35rem;
-      padding: 0.5rem 0.9rem; border-radius: 9px;
-      border: 1px solid var(--border2); background: var(--surface2);
-      color: var(--muted); font-family:'Inter',sans-serif;
-      font-size:0.82rem; font-weight:500; cursor:pointer; transition:all 0.15s;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.5rem 0.9rem;
+      border-radius: 9px;
+      border: 1px solid var(--border2);
+      background: var(--surface2);
+      color: var(--muted);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s;
     }
-    .compose-draft-btn:hover { color:var(--text); background:var(--surface3); }
+
+    .compose-draft-btn:hover {
+      color: var(--text);
+      background: var(--surface3);
+    }
+
     .compose-discard-btn {
-      display: inline-flex; align-items: center; gap: 0.35rem;
-      padding: 0.5rem 0.9rem; border-radius: 9px;
-      border: 1px solid rgba(255,107,107,0.2); background: rgba(255,107,107,0.08);
-      color: var(--danger); font-family:'Inter',sans-serif;
-      font-size:0.82rem; font-weight:500; cursor:pointer; transition:all 0.15s;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.5rem 0.9rem;
+      border-radius: 9px;
+      border: 1px solid rgba(255, 107, 107, 0.2);
+      background: rgba(255, 107, 107, 0.08);
+      color: var(--danger);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s;
     }
-    .compose-discard-btn:hover { background:rgba(255,107,107,0.18); }
+
+    .compose-discard-btn:hover {
+      background: rgba(255, 107, 107, 0.18);
+    }
 
     /* Sent success overlay */
     .compose-success {
-      display: none; position: absolute; inset: 0;
-      align-items: center; justify-content: center; flex-direction: column; gap: 0.75rem;
-      background: var(--surface); border-radius: 16px; z-index:10;
+      display: none;
+      position: absolute;
+      inset: 0;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 0.75rem;
+      background: var(--surface);
+      border-radius: 16px;
+      z-index: 10;
     }
-    .compose-success.show { display:flex; }
-    .compose-success-icon { font-size:2.5rem; }
-    .compose-success-title { font-size:1rem; font-weight:700; color:var(--success); }
-    .compose-success-sub { font-size:0.8rem; color:var(--muted); }
+
+    .compose-success.show {
+      display: flex;
+    }
+
+    .compose-success-icon {
+      font-size: 2.5rem;
+    }
+
+    .compose-success-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--success);
+    }
+
+    .compose-success-sub {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
   </style>
 </head>
+
 <body>
 
-<!-- Toast container -->
-<div class="toast-container" id="toasts"></div>
+  <!-- Toast container -->
+  <div class="toast-container" id="toasts"></div>
 
-<!-- Top Nav -->
-<nav class="topnav">
-  <div style="display:flex;align-items:center;gap:1rem;">
-    <a href="/" class="logo" style="text-decoration:none;color:inherit;">
-      <div class="logo-icon">✉️</div>
-      <span>MailMind</span>
-    </a>
-    <div style="display:flex;gap:0.25rem;">
-      <a href="/dashboard" style="display:inline-flex;align-items:center;gap:.35rem;padding:.45rem .85rem;border-radius:8px;font-family:'Inter',sans-serif;font-size:.82rem;font-weight:500;text-decoration:none;background:rgba(108,99,255,0.15);color:#a89fff;">📧 Emails</a>
-      <a href="/meetings"  style="display:inline-flex;align-items:center;gap:.35rem;padding:.45rem .85rem;border-radius:8px;font-family:'Inter',sans-serif;font-size:.82rem;font-weight:500;text-decoration:none;color:var(--muted);">🎙️ Meetings</a>
+  <!-- Top Nav -->
+  <nav class="topnav">
+    <div style="display:flex;align-items:center;gap:1rem;">
+      <a href="/" class="logo" style="text-decoration:none;color:inherit;">
+        <div class="logo-icon">✉️</div>
+        <span>MailMind</span>
+      </a>
+      <div style="display:flex;gap:0.25rem;">
+        <a href="/dashboard"
+          style="display:inline-flex;align-items:center;gap:.35rem;padding:.45rem .85rem;border-radius:8px;font-family:'Inter',sans-serif;font-size:.82rem;font-weight:500;text-decoration:none;background:rgba(108,99,255,0.15);color:#a89fff;">📧
+          Emails</a>
+        <a href="/meetings"
+          style="display:inline-flex;align-items:center;gap:.35rem;padding:.45rem .85rem;border-radius:8px;font-family:'Inter',sans-serif;font-size:.82rem;font-weight:500;text-decoration:none;color:var(--muted);">🎙️
+          Meetings</a>
+      </div>
     </div>
-  </div>
-  <div class="user-info">
-    {% if user_info.get('picture') %}
+    <div class="user-info">
+      {% if user_info.get('picture') %}
       <img class="avatar" src="{{ user_info.picture }}" alt="User avatar" />
-    {% endif %}
-    <div>
-      <div class="user-name">{{ user_info.get('name', 'User') }}</div>
-      <div class="user-email">{{ user_info.get('email', '') }}</div>
-    </div>
-    <a href="/logout" class="nav-btn nav-btn-ghost">Logout</a>
-  </div>
-</nav>
-
-
-<!-- Layout -->
-<div class="layout">
-
-  <!-- Sidebar -->
-  <aside class="sidebar">
-
-    <!-- Stats -->
-    <div>
-      <div class="section-label">Overview</div>
-      <div class="stats-grid">
-        <div class="stat-card">
-          <div class="stat-val stat-accent" id="stat-total">0</div>
-          <div class="stat-lbl">Emails</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-val stat-success" id="stat-att">0</div>
-          <div class="stat-lbl">Attachments</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Gemini API Key -->
-    <div>
-      <div class="section-label">Gemini API Key</div>
-      <div class="key-section">
-        <div class="key-input-row">
-          <input class="ctrl-input" id="gemini-key-input" type="password" placeholder="AIza..." />
-          <button class="btn btn-ghost" onclick="saveGeminiKey()" style="width:auto;padding:.55rem .7rem;font-size:.78rem;">Save</button>
-        </div>
-        <div class="key-status" id="key-status">Enter your Gemini API key to enable summaries</div>
-      </div>
-    </div>
-
-    <!-- Manual Fetch -->
-    <div>
-      <div class="section-label">Fetch Emails</div>
-      <div class="ctrl-panel">
-        <div class="input-group">
-          <label class="ctrl-label" for="query-input">Gmail Query</label>
-          <input class="ctrl-input" id="query-input" type="text" value="is:unread" placeholder="e.g. is:unread newer_than:1d" />
-        </div>
-        <div class="input-group">
-          <label class="ctrl-label" for="max-results">Max Emails</label>
-          <select class="ctrl-select" id="max-results">
-            <option value="5">5 emails</option>
-            <option value="10" selected>10 emails</option>
-            <option value="15">15 emails</option>
-            <option value="25">25 emails</option>
-          </select>
-        </div>
-        <button class="btn btn-primary" id="fetch-btn" onclick="fetchEmails()">
-          <span>⚡</span> Fetch & Summarize
-        </button>
-        <button class="btn btn-ghost" onclick="clearSummaries()">🗑 Clear All</button>
-      </div>
-    </div>
-
-    <!-- Auto Polling -->
-    <div>
-      <div class="section-label">Auto Polling</div>
-      <div class="ctrl-panel">
-        <div id="poll-status-badge" class="poll-status poll-inactive">
-          <span class="poll-dot"></span>
-          <span id="poll-status-text">Polling off</span>
-        </div>
-        <div class="input-group">
-          <label class="ctrl-label" for="poll-interval">Interval</label>
-          <select class="ctrl-select" id="poll-interval">
-            <option value="1">Every 1 minute</option>
-            <option value="3">Every 3 minutes</option>
-            <option value="5" selected>Every 5 minutes</option>
-            <option value="10">Every 10 minutes</option>
-            <option value="30">Every 30 minutes</option>
-          </select>
-        </div>
-        <button class="btn btn-success" id="poll-start-btn" onclick="startPolling()">▶ Start Auto-Poll</button>
-        <button class="btn btn-danger" id="poll-stop-btn" onclick="stopPolling()" style="display:none">⏹ Stop Polling</button>
-      </div>
-    </div>
-
-  </aside>
-
-  <!-- Main -->
-  <main class="main">
-    <div class="main-header">
+      {% endif %}
       <div>
-        <div class="main-title">Email Summaries</div>
-        <div class="main-sub" id="last-fetch-label">No emails fetched yet</div>
+        <div class="user-name">{{ user_info.get('name', 'User') }}</div>
+        <div class="user-email">{{ user_info.get('email', '') }}</div>
       </div>
-      <div class="filter-bar">
-        <div class="search-box">
-          <span class="search-icon">🔍</span>
-          <input type="text" id="search-input" placeholder="Search summaries..." oninput="filterCards()" />
-        </div>
-        <select class="sort-select" id="sort-select" onchange="filterCards()">
-          <option value="newest">Newest first</option>
-          <option value="oldest">Oldest first</option>
-          <option value="subject">By subject</option>
-        </select>
-      </div>
+      <a href="/logout" class="nav-btn nav-btn-ghost">Logout</a>
     </div>
+  </nav>
 
-    <!-- Email list -->
-    <div class="email-grid" id="email-grid">
-      <div class="empty-state" id="empty-state">
-        <div class="empty-icon">📭</div>
-        <div class="empty-title">No summaries yet</div>
-        <div class="empty-sub">Click "Fetch & Summarize" to get AI summaries of your unread emails</div>
-      </div>
-    </div>
-  </main>
 
-</div>
+  <!-- Layout -->
+  <div class="layout">
 
-<!-- ── Compose Modal ── -->
-<div class="compose-overlay" id="compose-overlay" onclick="handleOverlayClick(event)">
-  <div class="compose-window" id="compose-window">
+    <!-- Sidebar -->
+    <aside class="sidebar">
 
-    <!-- Success overlay -->
-    <div class="compose-success" id="compose-success">
-      <div class="compose-success-icon">✉️</div>
-      <div class="compose-success-title">Email Sent!</div>
-      <div class="compose-success-sub">Your reply was delivered successfully.</div>
-    </div>
-
-    <!-- Header -->
-    <div class="compose-header">
-      <div class="compose-title">
-        ✍️ Compose Reply
-        <span class="compose-title-badge">AI Draft</span>
-      </div>
-      <div class="compose-hdr-btns">
-        <button class="compose-hdr-btn danger" title="Discard" onclick="discardCompose()">✕</button>
-      </div>
-    </div>
-
-    <!-- Fields -->
-    <div class="compose-fields">
-      <!-- To -->
-      <div class="field-row" id="to-row">
-        <span class="field-label">To</span>
-        <div class="chips-input" id="to-chips" onclick="focusChipInput('to-input')"></div>
-        <input id="to-input" class="chips-input" style="background:none;border:none;outline:none;color:var(--text);font-family:inherit;font-size:.85rem;min-width:120px;flex:1;" placeholder="Add recipient…" />
-        <div class="field-row-extra">
-          <button class="toggle-cc" onclick="toggleCcBcc()">Cc / Bcc</button>
+      <!-- Stats -->
+      <div>
+        <div class="section-label">Overview</div>
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-val stat-accent" id="stat-total">0</div>
+            <div class="stat-lbl">Emails</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-val stat-success" id="stat-att">0</div>
+            <div class="stat-lbl">Attachments</div>
+          </div>
         </div>
       </div>
 
-      <!-- CC (hidden by default) -->
-      <div class="field-row" id="cc-row" style="display:none;">
-        <span class="field-label">Cc</span>
-        <div class="chips-input" id="cc-chips" onclick="focusChipInput('cc-input')"></div>
-        <input id="cc-input" class="chips-input" style="background:none;border:none;outline:none;color:var(--text);font-family:inherit;font-size:.85rem;min-width:120px;flex:1;" placeholder="Add Cc…" />
+      <!-- Gemini API Key -->
+      <div>
+        <div class="section-label">Gemini API Key</div>
+        <div class="key-section">
+          <div class="key-input-row">
+            <input class="ctrl-input" id="gemini-key-input" type="password" placeholder="AIza..." />
+            <button class="btn btn-ghost" onclick="saveGeminiKey()"
+              style="width:auto;padding:.55rem .7rem;font-size:.78rem;">Save</button>
+          </div>
+          <div class="key-status" id="key-status">Enter your Gemini API key to enable summaries</div>
+        </div>
       </div>
 
-      <!-- BCC (hidden by default) -->
-      <div class="field-row" id="bcc-row" style="display:none;">
-        <span class="field-label">Bcc</span>
-        <div class="chips-input" id="bcc-chips" onclick="focusChipInput('bcc-input')"></div>
-        <input id="bcc-input" class="chips-input" style="background:none;border:none;outline:none;color:var(--text);font-family:inherit;font-size:.85rem;min-width:120px;flex:1;" placeholder="Add Bcc…" />
+      <!-- Manual Fetch -->
+      <div>
+        <div class="section-label">Fetch Emails</div>
+        <div class="ctrl-panel">
+          <div class="input-group">
+            <label class="ctrl-label" for="query-input">Gmail Query</label>
+            <input class="ctrl-input" id="query-input" type="text" value="is:unread"
+              placeholder="e.g. is:unread newer_than:1d" />
+          </div>
+          <div class="input-group">
+            <label class="ctrl-label" for="max-results">Max Emails</label>
+            <select class="ctrl-select" id="max-results">
+              <option value="5">5 emails</option>
+              <option value="10" selected>10 emails</option>
+              <option value="15">15 emails</option>
+              <option value="25">25 emails</option>
+            </select>
+          </div>
+          <button class="btn btn-primary" id="fetch-btn" onclick="fetchEmails()">
+            <span>⚡</span> Fetch & Summarize
+          </button>
+          <button class="btn btn-ghost" onclick="clearSummaries()">🗑 Clear All</button>
+        </div>
       </div>
 
-      <!-- Subject -->
-      <div class="field-row">
-        <span class="field-label">Sub</span>
-        <input id="compose-subject" class="subject-input" type="text" placeholder="Subject" />
+      <!-- Auto Polling -->
+      <div>
+        <div class="section-label">Auto Polling</div>
+        <div class="ctrl-panel">
+          <div id="poll-status-badge" class="poll-status poll-inactive">
+            <span class="poll-dot"></span>
+            <span id="poll-status-text">Polling off</span>
+          </div>
+          <div class="input-group">
+            <label class="ctrl-label" for="poll-interval">Interval</label>
+            <select class="ctrl-select" id="poll-interval">
+              <option value="1">Every 1 minute</option>
+              <option value="3">Every 3 minutes</option>
+              <option value="5" selected>Every 5 minutes</option>
+              <option value="10">Every 10 minutes</option>
+              <option value="30">Every 30 minutes</option>
+            </select>
+          </div>
+          <button class="btn btn-success" id="poll-start-btn" onclick="startPolling()">▶ Start Auto-Poll</button>
+          <button class="btn btn-danger" id="poll-stop-btn" onclick="stopPolling()" style="display:none">⏹ Stop
+            Polling</button>
+        </div>
       </div>
-    </div>
 
-    <!-- Body -->
-    <div class="compose-body">
-      <textarea id="compose-body-ta" class="compose-textarea" placeholder="Write your message…"></textarea>
-      <!-- Loading state -->
-      <div class="compose-loading" id="compose-loading">
-        <div class="compose-spin"></div>
-        <div class="compose-load-text">Gemini is drafting your reply…</div>
-      </div>
-    </div>
+    </aside>
 
-    <!-- Footer -->
-    <div class="compose-footer">
-      <div class="compose-footer-left">
-        <button class="compose-send-btn" id="compose-send-btn" onclick="sendComposedEmail()">
-          ➤ Send
-        </button>
-        <button class="compose-draft-btn" onclick="saveComposeDraft()">💾 Save Draft</button>
+    <!-- Main -->
+    <main class="main">
+      <div class="main-header">
+        <div>
+          <div class="main-title">Email Summaries</div>
+          <div class="main-sub" id="last-fetch-label">No emails fetched yet</div>
+        </div>
+        <div class="filter-bar">
+          <div class="search-box">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="search-input" placeholder="Search summaries..." oninput="filterCards()" />
+          </div>
+          <select class="sort-select" id="sort-select" onchange="filterCards()">
+            <option value="newest">Newest first</option>
+            <option value="oldest">Oldest first</option>
+            <option value="subject">By subject</option>
+          </select>
+        </div>
       </div>
-      <button class="compose-discard-btn" onclick="discardCompose()">🗑 Discard</button>
-    </div>
+
+      <!-- Email list -->
+      <div class="email-grid" id="email-grid">
+        <div class="empty-state" id="empty-state">
+          <div class="empty-icon">📭</div>
+          <div class="empty-title">No summaries yet</div>
+          <div class="empty-sub">Click "Fetch & Summarize" to get AI summaries of your unread emails</div>
+        </div>
+      </div>
+    </main>
 
   </div>
-</div>
 
-<script>
-  // ── Compose Modal State ──────────────────────────────────────────────────────
-  let composeRecipients = { to: [], cc: [], bcc: [] };
+  <!-- ── Compose Modal ── -->
+  <div class="compose-overlay" id="compose-overlay" onclick="handleOverlayClick(event)">
+    <div class="compose-window" id="compose-window">
 
-  function openDraftModal(emailId) {
-    const emailData = emailDataMap[emailId];
-    if (!emailData) { toast('Could not load email data — please refresh', 'error'); return; }
+      <!-- Success overlay -->
+      <div class="compose-success" id="compose-success">
+        <div class="compose-success-icon">✉️</div>
+        <div class="compose-success-title">Email Sent!</div>
+        <div class="compose-success-sub">Your reply was delivered successfully.</div>
+      </div>
 
-    // Reset modal
-    composeRecipients = { to: [], cc: [], bcc: [] };
-    ['to','cc','bcc'].forEach(f => {
-      document.getElementById(f+'-chips').innerHTML = '';
-      document.getElementById(f+'-input').value = '';
-    });
-    document.getElementById('cc-row').style.display = 'none';
-    document.getElementById('bcc-row').style.display = 'none';
-    document.getElementById('compose-body-ta').value = '';
-    document.getElementById('compose-success').classList.remove('show');
-    document.getElementById('compose-send-btn').disabled = false;
-    document.getElementById('compose-send-btn').innerHTML = '➤ Send';
+      <!-- Header -->
+      <div class="compose-header">
+        <div class="compose-title">
+          ✍️ Compose Reply
+          <span class="compose-title-badge">AI Draft</span>
+        </div>
+        <div class="compose-hdr-btns">
+          <button class="compose-hdr-btn danger" title="Discard" onclick="discardCompose()">✕</button>
+        </div>
+      </div>
 
-    // Pre-fill subject
-    document.getElementById('compose-subject').value = 'Re: ' + (emailData.subject || '');
+      <!-- Fields -->
+      <div class="compose-fields">
+        <!-- To -->
+        <div class="field-row" id="to-row">
+          <span class="field-label">To</span>
+          <div class="chips-input" id="to-chips" onclick="focusChipInput('to-input')"></div>
+          <input id="to-input" class="chips-input"
+            style="background:none;border:none;outline:none;color:var(--text);font-family:inherit;font-size:.85rem;min-width:120px;flex:1;"
+            placeholder="Add recipient…" />
+          <div class="field-row-extra">
+            <button class="toggle-cc" onclick="toggleCcBcc()">Cc / Bcc</button>
+          </div>
+        </div>
 
-    // Pre-fill To from sender
-    const senderMatch = (emailData.sender || '').match(/<(.+?)>/);
-    const senderEmail = senderMatch ? senderMatch[1] : (emailData.sender || '');
-    if (senderEmail) addChip('to', senderEmail);
+        <!-- CC (hidden by default) -->
+        <div class="field-row" id="cc-row" style="display:none;">
+          <span class="field-label">Cc</span>
+          <div class="chips-input" id="cc-chips" onclick="focusChipInput('cc-input')"></div>
+          <input id="cc-input" class="chips-input"
+            style="background:none;border:none;outline:none;color:var(--text);font-family:inherit;font-size:.85rem;min-width:120px;flex:1;"
+            placeholder="Add Cc…" />
+        </div>
 
-    // Show modal
-    document.getElementById('compose-overlay').classList.add('open');
+        <!-- BCC (hidden by default) -->
+        <div class="field-row" id="bcc-row" style="display:none;">
+          <span class="field-label">Bcc</span>
+          <div class="chips-input" id="bcc-chips" onclick="focusChipInput('bcc-input')"></div>
+          <input id="bcc-input" class="chips-input"
+            style="background:none;border:none;outline:none;color:var(--text);font-family:inherit;font-size:.85rem;min-width:120px;flex:1;"
+            placeholder="Add Bcc…" />
+        </div>
 
-    // Fetch AI draft
-    loadAIDraft(emailData);
-  }
+        <!-- Subject -->
+        <div class="field-row">
+          <span class="field-label">Sub</span>
+          <input id="compose-subject" class="subject-input" type="text" placeholder="Subject" />
+        </div>
+      </div>
 
-  async function loadAIDraft(emailData) {
-    document.getElementById('compose-loading').classList.add('show');
-    document.getElementById('compose-body-ta').style.display = 'none';
+      <!-- Body -->
+      <div class="compose-body">
+        <textarea id="compose-body-ta" class="compose-textarea" placeholder="Write your message…"></textarea>
+        <!-- Loading state -->
+        <div class="compose-loading" id="compose-loading">
+          <div class="compose-spin"></div>
+          <div class="compose-load-text">Gemini is drafting your reply…</div>
+        </div>
+      </div>
 
-    try {
-      const res = await fetch('/api/draft', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          subject: emailData.subject,
-          sender:  emailData.sender,
-          summary: emailData.summary,
-          body_hint: ''
-        })
+      <!-- Footer -->
+      <div class="compose-footer">
+        <div class="compose-footer-left">
+          <button class="compose-send-btn" id="compose-send-btn" onclick="sendComposedEmail()">
+            ➤ Send
+          </button>
+          <button class="compose-draft-btn" onclick="saveComposeDraft()">💾 Save Draft</button>
+        </div>
+        <button class="compose-discard-btn" onclick="discardCompose()">🗑 Discard</button>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    // ── Compose Modal State ──────────────────────────────────────────────────────
+    let composeRecipients = { to: [], cc: [], bcc: [] };
+
+    function openDraftModal(emailId) {
+      const emailData = emailDataMap[emailId];
+      if (!emailData) { toast('Could not load email data — please refresh', 'error'); return; }
+
+      // Reset modal
+      composeRecipients = { to: [], cc: [], bcc: [] };
+      ['to', 'cc', 'bcc'].forEach(f => {
+        document.getElementById(f + '-chips').innerHTML = '';
+        document.getElementById(f + '-input').value = '';
       });
-      const data = await res.json();
-      if (data.ok) {
-        document.getElementById('compose-body-ta').value = data.draft_text || '';
-      } else {
-        document.getElementById('compose-body-ta').value = '[Draft generation failed: ' + (data.error || 'unknown error') + ']';
-      }
-    } catch(e) {
-      document.getElementById('compose-body-ta').value = '[Network error: ' + e.message + ']';
+      document.getElementById('cc-row').style.display = 'none';
+      document.getElementById('bcc-row').style.display = 'none';
+      document.getElementById('compose-body-ta').value = '';
+      document.getElementById('compose-success').classList.remove('show');
+      document.getElementById('compose-send-btn').disabled = false;
+      document.getElementById('compose-send-btn').innerHTML = '➤ Send';
+
+      // Pre-fill subject
+      document.getElementById('compose-subject').value = 'Re: ' + (emailData.subject || '');
+
+      // Pre-fill To from sender
+      const senderMatch = (emailData.sender || '').match(/<(.+?)>/);
+      const senderEmail = senderMatch ? senderMatch[1] : (emailData.sender || '');
+      if (senderEmail) addChip('to', senderEmail);
+
+      // Show modal
+      document.getElementById('compose-overlay').classList.add('open');
+
+      // Fetch AI draft
+      loadAIDraft(emailData);
     }
 
-    document.getElementById('compose-loading').classList.remove('show');
-    document.getElementById('compose-body-ta').style.display = 'block';
-  }
+    async function loadAIDraft(emailData) {
+      document.getElementById('compose-loading').classList.add('show');
+      document.getElementById('compose-body-ta').style.display = 'none';
 
-  function discardCompose() {
-    document.getElementById('compose-overlay').classList.remove('open');
-  }
+      try {
+        const res = await fetch('/api/draft', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            subject: emailData.subject,
+            sender: emailData.sender,
+            summary: emailData.summary,
+            body_hint: ''
+          })
+        });
+        const data = await res.json();
+        if (data.ok) {
+          document.getElementById('compose-body-ta').value = data.draft_text || '';
+        } else {
+          document.getElementById('compose-body-ta').value = '[Draft generation failed: ' + (data.error || 'unknown error') + ']';
+        }
+      } catch (e) {
+        document.getElementById('compose-body-ta').value = '[Network error: ' + e.message + ']';
+      }
 
-  function handleOverlayClick(e) {
-    if (e.target === document.getElementById('compose-overlay')) discardCompose();
-  }
+      document.getElementById('compose-loading').classList.remove('show');
+      document.getElementById('compose-body-ta').style.display = 'block';
+    }
 
-  function toggleCcBcc() {
-    const cc  = document.getElementById('cc-row');
-    const bcc = document.getElementById('bcc-row');
-    const show = cc.style.display === 'none';
-    cc.style.display  = show ? 'flex' : 'none';
-    bcc.style.display = show ? 'flex' : 'none';
-    if (show) document.getElementById('cc-input').focus();
-  }
+    function discardCompose() {
+      document.getElementById('compose-overlay').classList.remove('open');
+    }
 
-  // ── Recipient Chips ──────────────────────────────────────────────────────────
-  function addChip(field, email) {
-    email = email.trim().replace(/,+$/, '');
-    if (!email || composeRecipients[field].includes(email)) return;
-    composeRecipients[field].push(email);
-    renderChips(field);
-  }
+    function handleOverlayClick(e) {
+      if (e.target === document.getElementById('compose-overlay')) discardCompose();
+    }
 
-  function removeChip(field, email) {
-    composeRecipients[field] = composeRecipients[field].filter(e => e !== email);
-    renderChips(field);
-  }
+    function toggleCcBcc() {
+      const cc = document.getElementById('cc-row');
+      const bcc = document.getElementById('bcc-row');
+      const show = cc.style.display === 'none';
+      cc.style.display = show ? 'flex' : 'none';
+      bcc.style.display = show ? 'flex' : 'none';
+      if (show) document.getElementById('cc-input').focus();
+    }
 
-  function renderChips(field) {
-    const container = document.getElementById(field + '-chips');
-    container.innerHTML = '';
-    composeRecipients[field].forEach(email => {
-      const chip = document.createElement('span');
-      chip.className = 'chip';
-      chip.innerHTML = `${escHtml(email)}<button class="chip-del" onclick="removeChip('${field}','${escHtml(email)}')">✕</button>`;
-      container.appendChild(chip);
-    });
-  }
+    // ── Recipient Chips ──────────────────────────────────────────────────────────
+    function addChip(field, email) {
+      email = email.trim().replace(/,+$/, '');
+      if (!email || composeRecipients[field].includes(email)) return;
+      composeRecipients[field].push(email);
+      renderChips(field);
+    }
 
-  function focusChipInput(inputId) {
-    document.getElementById(inputId).focus();
-  }
+    function removeChip(field, email) {
+      composeRecipients[field] = composeRecipients[field].filter(e => e !== email);
+      renderChips(field);
+    }
 
-  // Wire chip inputs
-  ['to','cc','bcc'].forEach(field => {
-    const input = document.getElementById(field + '-input');
-    if (!input) return;
-    input.addEventListener('keydown', e => {
-      if (e.key === 'Enter' || e.key === ',' || e.key === 'Tab') {
-        e.preventDefault();
+    function renderChips(field) {
+      const container = document.getElementById(field + '-chips');
+      container.innerHTML = '';
+      composeRecipients[field].forEach(email => {
+        const chip = document.createElement('span');
+        chip.className = 'chip';
+        chip.innerHTML = `${escHtml(email)}<button class="chip-del" onclick="removeChip('${field}','${escHtml(email)}')">✕</button>`;
+        container.appendChild(chip);
+      });
+    }
+
+    function focusChipInput(inputId) {
+      document.getElementById(inputId).focus();
+    }
+
+    // Wire chip inputs
+    ['to', 'cc', 'bcc'].forEach(field => {
+      const input = document.getElementById(field + '-input');
+      if (!input) return;
+      input.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ',' || e.key === 'Tab') {
+          e.preventDefault();
+          const val = input.value.trim().replace(/,+$/, '');
+          if (val) { addChip(field, val); input.value = ''; }
+        } else if (e.key === 'Backspace' && !input.value && composeRecipients[field].length) {
+          const last = composeRecipients[field][composeRecipients[field].length - 1];
+          removeChip(field, last);
+        }
+      });
+      input.addEventListener('blur', () => {
         const val = input.value.trim().replace(/,+$/, '');
         if (val) { addChip(field, val); input.value = ''; }
-      } else if (e.key === 'Backspace' && !input.value && composeRecipients[field].length) {
-        const last = composeRecipients[field][composeRecipients[field].length - 1];
-        removeChip(field, last);
-      }
-    });
-    input.addEventListener('blur', () => {
-      const val = input.value.trim().replace(/,+$/, '');
-      if (val) { addChip(field, val); input.value = ''; }
-    });
-  });
-
-  // ── Send Email ───────────────────────────────────────────────────────────────
-  async function sendComposedEmail() {
-    // Flush any unconfirmed input
-    ['to','cc','bcc'].forEach(f => {
-      const inp = document.getElementById(f+'-input');
-      const val = inp.value.trim().replace(/,+$/,'');
-      if (val) { addChip(f, val); inp.value = ''; }
-    });
-
-    if (!composeRecipients.to.length) {
-      toast('Please add at least one recipient in To field', 'error');
-      return;
-    }
-
-    const btn = document.getElementById('compose-send-btn');
-    btn.disabled = true;
-    btn.innerHTML = '<span class="spin">⟳</span> Sending…';
-
-    const payload = {
-      to:      composeRecipients.to.join(', '),
-      cc:      composeRecipients.cc.join(', '),
-      bcc:     composeRecipients.bcc.join(', '),
-      subject: document.getElementById('compose-subject').value,
-      body:    document.getElementById('compose-body-ta').value,
-    };
-
-    try {
-      const res  = await fetch('/api/send', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
       });
-      const data = await res.json();
+    });
 
-      if (data.ok) {
-        document.getElementById('compose-success').classList.add('show');
-        toast('Email sent successfully! ✉️', 'success');
-        setTimeout(() => discardCompose(), 2200);
-      } else {
-        toast('Send failed: ' + (data.error || 'unknown error'), 'error', 6000);
+    // ── Send Email ───────────────────────────────────────────────────────────────
+    async function sendComposedEmail() {
+      // Flush any unconfirmed input
+      ['to', 'cc', 'bcc'].forEach(f => {
+        const inp = document.getElementById(f + '-input');
+        const val = inp.value.trim().replace(/,+$/, '');
+        if (val) { addChip(f, val); inp.value = ''; }
+      });
+
+      if (!composeRecipients.to.length) {
+        toast('Please add at least one recipient in To field', 'error');
+        return;
+      }
+
+      const btn = document.getElementById('compose-send-btn');
+      btn.disabled = true;
+      btn.innerHTML = '<span class="spin">⟳</span> Sending…';
+
+      const payload = {
+        to: composeRecipients.to.join(', '),
+        cc: composeRecipients.cc.join(', '),
+        bcc: composeRecipients.bcc.join(', '),
+        subject: document.getElementById('compose-subject').value,
+        body: document.getElementById('compose-body-ta').value,
+      };
+
+      try {
+        const res = await fetch('/api/send', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+
+        if (data.ok) {
+          document.getElementById('compose-success').classList.add('show');
+          toast('Email sent successfully! ✉️', 'success');
+          setTimeout(() => discardCompose(), 2200);
+        } else {
+          toast('Send failed: ' + (data.error || 'unknown error'), 'error', 6000);
+          btn.disabled = false;
+          btn.innerHTML = '➤ Send';
+        }
+      } catch (e) {
+        toast('Network error: ' + e.message, 'error', 6000);
         btn.disabled = false;
         btn.innerHTML = '➤ Send';
       }
-    } catch(e) {
-      toast('Network error: ' + e.message, 'error', 6000);
-      btn.disabled = false;
-      btn.innerHTML = '➤ Send';
     }
-  }
 
-  // ── Save Draft to Gmail ──────────────────────────────────────────────────────
-  async function saveComposeDraft() {
-    ['to','cc','bcc'].forEach(f => {
-      const inp = document.getElementById(f+'-input');
-      const val = inp.value.trim().replace(/,+$/,'');
-      if (val) { addChip(f, val); inp.value = ''; }
-    });
-
-    const payload = {
-      subject: document.getElementById('compose-subject').value,
-      sender:  composeRecipients.to.join(', '),
-      summary: document.getElementById('compose-body-ta').value,
-      body_hint: ''
-    };
-
-    // Re-use the existing /api/draft endpoint which saves to Gmail Drafts
-    toast('Saving draft to Gmail…', 'info', 3000);
-    try {
-      const res = await fetch('/api/draft', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
+    // ── Save Draft to Gmail ──────────────────────────────────────────────────────
+    async function saveComposeDraft() {
+      ['to', 'cc', 'bcc'].forEach(f => {
+        const inp = document.getElementById(f + '-input');
+        const val = inp.value.trim().replace(/,+$/, '');
+        if (val) { addChip(f, val); inp.value = ''; }
       });
-      const data = await res.json();
-      if (data.ok && data.gmail_url) {
-        toast('Draft saved! <a href="' + data.gmail_url + '" target="_blank" style="color:var(--accent2);text-decoration:underline;">Open in Gmail ↗</a>', 'success', 5000);
-      } else {
-        toast('Draft saved locally (Gmail save failed)', 'info');
+
+      const payload = {
+        subject: document.getElementById('compose-subject').value,
+        sender: composeRecipients.to.join(', '),
+        summary: document.getElementById('compose-body-ta').value,
+        body_hint: ''
+      };
+
+      // Re-use the existing /api/draft endpoint which saves to Gmail Drafts
+      toast('Saving draft to Gmail…', 'info', 3000);
+      try {
+        const res = await fetch('/api/draft', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (data.ok && data.gmail_url) {
+          toast('Draft saved! <a href="' + data.gmail_url + '" target="_blank" style="color:var(--accent2);text-decoration:underline;">Open in Gmail ↗</a>', 'success', 5000);
+        } else {
+          toast('Draft saved locally (Gmail save failed)', 'info');
+        }
+      } catch (e) {
+        toast('Could not save draft: ' + e.message, 'error');
       }
-    } catch(e) {
-      toast('Could not save draft: ' + e.message, 'error');
     }
-  }
-  // ── State ──────────────────────────────────────────────────────────────────
-  let allSummaries = [];
-  let emailDataMap  = {};   // id → summary object (avoids fragile data-attr serialization)
-  let pollingActive = false;
-  let pollingInterval = null;
+    // ── State ──────────────────────────────────────────────────────────────────
+    let allSummaries = [];
+    let emailDataMap = {};   // id → summary object (avoids fragile data-attr serialization)
+    let pollingActive = false;
+    let pollingInterval = null;
 
-  // ── Toast ──────────────────────────────────────────────────────────────────
-  function toast(msg, type = 'info', duration = 3500) {
-    const icons = { info: 'ℹ️', success: '✅', error: '❌' };
-    const el = document.createElement('div');
-    el.className = `toast toast-${type}`;
-    el.innerHTML = `<span>${icons[type]}</span><span>${msg}</span>`;
-    document.getElementById('toasts').appendChild(el);
-    setTimeout(() => el.remove(), duration);
-  }
-
-  // ── Markdown → HTML (simple) ───────────────────────────────────────────────
-  function renderMarkdown(text) {
-    if (!text) return '';
-    return text
-      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-      .replace(/\*(.+?)\*/g, '<em>$1</em>')
-      .replace(/`(.+?)`/g, '<code>$1</code>')
-      .replace(/^####\s+(.+)$/gm, '<h3>$1</h3>')
-      .replace(/^###\s+(.+)$/gm, '<h3>$1</h3>')
-      .replace(/^##\s+(.+)$/gm, '<h2>$1</h2>')
-      .replace(/^#\s+(.+)$/gm, '<h2>$1</h2>')
-      .replace(/^\s*[-*]\s+(.+)$/gm, '<li>$1</li>')
-      .replace(/(<li>.*<\/li>)/s, '<ul>$1</ul>')
-      .replace(/^\d+\.\s+(.+)$/gm, '<li>$1</li>')
-      .replace(/\n\n/g, '</p><p>')
-      .replace(/^(?!<[hlu])(.+)$/gm, (m, p1) => p1.trim() ? p1 : '')
-      .replace(/(<p>)+/g, '<p>').replace(/(<\/p>)+/g, '</p>');
-  }
-
-  // ── File type icon ─────────────────────────────────────────────────────────
-  function fileIcon(filename) {
-    const ext = filename.split('.').pop().toLowerCase();
-    const icons = { pdf: '📄', docx: '📝', doc: '📝', xlsx: '📊', xls: '📊',
-                    png: '🖼', jpg: '🖼', jpeg: '🖼', gif: '🖼', webp: '🖼',
-                    txt: '📃', csv: '📊' };
-    return icons[ext] || '📎';
-  }
-
-  // ── Render Cards ───────────────────────────────────────────────────────────
-  function renderCards(summaries) {
-    const grid = document.getElementById('email-grid');
-    const empty = document.getElementById('empty-state');
-
-    // Remove old cards (keep empty state)
-    grid.querySelectorAll('.email-card').forEach(c => c.remove());
-    grid.querySelectorAll('.shimmer-card').forEach(c => c.remove());
-
-    if (!summaries || summaries.length === 0) {
-      empty.style.display = 'flex';
-      return;
+    // ── Toast ──────────────────────────────────────────────────────────────────
+    function toast(msg, type = 'info', duration = 3500) {
+      const icons = { info: 'ℹ️', success: '✅', error: '❌' };
+      const el = document.createElement('div');
+      el.className = `toast toast-${type}`;
+      el.innerHTML = `<span>${icons[type]}</span><span>${msg}</span>`;
+      document.getElementById('toasts').appendChild(el);
+      setTimeout(() => el.remove(), duration);
     }
-    empty.style.display = 'none';
 
-    summaries.forEach((s, i) => {
-      const card = document.createElement('div');
-      card.className = 'email-card';
-      card.style.animationDelay = `${i * 50}ms`;
+    // ── Markdown → HTML (simple) ───────────────────────────────────────────────
+    function renderMarkdown(text) {
+      if (!text) return '';
+      return text
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+        .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\*(.+?)\*/g, '<em>$1</em>')
+        .replace(/`(.+?)`/g, '<code>$1</code>')
+        .replace(/^####\s+(.+)$/gm, '<h3>$1</h3>')
+        .replace(/^###\s+(.+)$/gm, '<h3>$1</h3>')
+        .replace(/^##\s+(.+)$/gm, '<h2>$1</h2>')
+        .replace(/^#\s+(.+)$/gm, '<h2>$1</h2>')
+        .replace(/^\s*[-*]\s+(.+)$/gm, '<li>$1</li>')
+        .replace(/(<li>.*<\/li>)/s, '<ul>$1</ul>')
+        .replace(/^\d+\.\s+(.+)$/gm, '<li>$1</li>')
+        .replace(/\n\n/g, '</p><p>')
+        .replace(/^(?!<[hlu])(.+)$/gm, (m, p1) => p1.trim() ? p1 : '')
+        .replace(/(<p>)+/g, '<p>').replace(/(<\/p>)+/g, '</p>');
+    }
 
-      const attCount = s.attachments ? s.attachments.length : 0;
-      const attTag = attCount > 0 ? `<span class="tag tag-att">📎 ${attCount} att.</span>` : '';
-      const newTag = `<span class="tag tag-new">✨ AI</span>`;
+    // ── File type icon ─────────────────────────────────────────────────────────
+    function fileIcon(filename) {
+      const ext = filename.split('.').pop().toLowerCase();
+      const icons = {
+        pdf: '📄', docx: '📝', doc: '📝', xlsx: '📊', xls: '📊',
+        png: '🖼', jpg: '🖼', jpeg: '🖼', gif: '🖼', webp: '🖼',
+        txt: '📃', csv: '📊'
+      };
+      return icons[ext] || '📎';
+    }
 
-      const attChips = attCount > 0
-        ? `<div class="att-chips">${s.attachments.map(f => `<span class="att-chip">${fileIcon(f)} ${f}</span>`).join('')}</div>`
-        : '';
+    // ── Render Cards ───────────────────────────────────────────────────────────
+    function renderCards(summaries) {
+      const grid = document.getElementById('email-grid');
+      const empty = document.getElementById('empty-state');
 
-      // Store email data in JS map, pass only the id to the button
-      emailDataMap[s.id] = { id: s.id, subject: s.subject, sender: s.sender, summary: s.summary };
+      // Remove old cards (keep empty state)
+      grid.querySelectorAll('.email-card').forEach(c => c.remove());
+      grid.querySelectorAll('.shimmer-card').forEach(c => c.remove());
 
-      card.innerHTML = `
+      if (!summaries || summaries.length === 0) {
+        empty.style.display = 'flex';
+        return;
+      }
+      empty.style.display = 'none';
+
+      summaries.forEach((s, i) => {
+        const card = document.createElement('div');
+        card.className = 'email-card';
+        card.style.animationDelay = `${i * 50}ms`;
+
+        const attCount = s.attachments ? s.attachments.length : 0;
+        const attTag = attCount > 0 ? `<span class="tag tag-att">📎 ${attCount} att.</span>` : '';
+        const newTag = `<span class="tag tag-new">✨ AI</span>`;
+
+        const attChips = attCount > 0
+          ? `<div class="att-chips">${s.attachments.map(f => `<span class="att-chip">${fileIcon(f)} ${f}</span>`).join('')}</div>`
+          : '';
+
+        // Attachment summary dropdown — triggers on-demand Gemini analysis
+        const attSummaryHtml = attCount > 0 ? `
+          <div class="att-summary-row" id="att-row-${s.id}" data-email-id="${s.id}" onclick="toggleAttSummary(this)">
+            <span>📄</span>
+            <span class="att-summary-label">Analyse Attachments with AI</span>
+            <span class="att-summary-chevron">▼</span>
+          </div>
+          <div class="att-summary-panel" id="att-panel-${s.id}">
+            <div class="att-summary-inner" id="att-content-${s.id}">
+              <div class="att-loading"><div class="att-spinner"></div> Click the arrow above to start AI analysis…</div>
+            </div>
+          </div>` : '';
+
+        // Store email data in JS map, pass only the id to the button
+        emailDataMap[s.id] = { id: s.id, subject: s.subject, sender: s.sender, summary: s.summary };
+
+        card.innerHTML = `
         <div class="card-header" onclick="toggleCard(this.parentElement)">
           <div class="card-meta">
             <div class="card-subject">${escHtml(s.subject)}</div>
@@ -1016,6 +1862,7 @@
           <div class="card-body-inner">
             <div class="summary-content">${renderMarkdown(s.summary)}</div>
             ${attChips}
+            ${attSummaryHtml}
             <div class="draft-action-bar">
               <button class="btn-draft-reply" onclick="openDraftModal('${escHtml(s.id)}')">
                 ✍️ Draft Reply
@@ -1024,197 +1871,232 @@
           </div>
         </div>
       `;
-      grid.appendChild(card);
-    });
+        grid.appendChild(card);
+      });
 
-    // Stats
-    const totalAtt = summaries.reduce((acc, s) => acc + (s.attachments ? s.attachments.length : 0), 0);
-    document.getElementById('stat-total').textContent = summaries.length;
-    document.getElementById('stat-att').textContent = totalAtt;
-  }
-
-  function escHtml(s) {
-    return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-  }
-
-  function toggleCard(card) {
-    card.classList.toggle('expanded');
-  }
-
-  // ── Filter / Sort ──────────────────────────────────────────────────────────
-  function filterCards() {
-    const query = document.getElementById('search-input').value.toLowerCase();
-    const sort = document.getElementById('sort-select').value;
-
-    let filtered = [...allSummaries];
-    if (query) {
-      filtered = filtered.filter(s =>
-        (s.subject || '').toLowerCase().includes(query) ||
-        (s.sender || '').toLowerCase().includes(query) ||
-        (s.summary || '').toLowerCase().includes(query)
-      );
+      // Stats
+      const totalAtt = summaries.reduce((acc, s) => acc + (s.attachments ? s.attachments.length : 0), 0);
+      document.getElementById('stat-total').textContent = summaries.length;
+      document.getElementById('stat-att').textContent = totalAtt;
     }
 
-    if (sort === 'oldest') filtered.reverse();
-    else if (sort === 'subject') filtered.sort((a,b) => (a.subject||'').localeCompare(b.subject||''));
-
-    renderCards(filtered);
-
-    if (query && filtered.length === 0) {
-      document.getElementById('empty-state').style.display = 'flex';
-      document.getElementById('empty-state').querySelector('.empty-title').textContent = 'No results found';
-      document.getElementById('empty-state').querySelector('.empty-sub').textContent = `No emails matching "${query}"`;
+    function escHtml(s) {
+      return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
     }
-  }
 
-  // ── Shimmer Loader ─────────────────────────────────────────────────────────
-  function showShimmers(n = 3) {
-    const grid = document.getElementById('email-grid');
-    document.getElementById('empty-state').style.display = 'none';
-    grid.querySelectorAll('.email-card,.shimmer-card').forEach(c => c.remove());
-    for (let i = 0; i < n; i++) {
-      const s = document.createElement('div');
-      s.className = 'shimmer-card';
-      s.innerHTML = `
+    function toggleCard(card) {
+      card.classList.toggle('expanded');
+    }
+
+    // ── On-demand attachment analysis ──────────────────────────────────────────
+    async function toggleAttSummary(row) {
+      event.stopPropagation();
+
+      const emailId = row.dataset.emailId;
+      const panel   = document.getElementById('att-panel-' + emailId);
+      const content = document.getElementById('att-content-' + emailId);
+      const isOpen  = row.classList.contains('open');
+
+      // Toggle open/close
+      row.classList.toggle('open');
+      panel.classList.toggle('open');
+
+      // If closing or already loaded, nothing more to do
+      if (isOpen || content.dataset.loaded === 'true') return;
+
+      // Show spinner
+      content.innerHTML = '<div class="att-loading"><div class="att-spinner"></div> Analysing attachments with Gemini AI…</div>';
+
+      try {
+        const resp = await fetch(`/api/analyze-attachments/${emailId}`, { method: 'POST' });
+        const data = await resp.json();
+
+        if (data.ok) {
+          content.innerHTML = '<div class="att-summary-inner" style="border:none;padding:0;background:none;">' + renderMarkdown(data.summary) + '</div>';
+          content.dataset.loaded = 'true';
+        } else {
+          content.innerHTML = '<div class="att-error">❌ ' + (data.error || 'Analysis failed') + '</div>';
+        }
+      } catch (e) {
+        content.innerHTML = '<div class="att-error">❌ Network error — please try again.</div>';
+      }
+    }
+
+    // ── Filter / Sort ──────────────────────────────────────────────────────────
+    function filterCards() {
+      const query = document.getElementById('search-input').value.toLowerCase();
+      const sort = document.getElementById('sort-select').value;
+
+      let filtered = [...allSummaries];
+      if (query) {
+        filtered = filtered.filter(s =>
+          (s.subject || '').toLowerCase().includes(query) ||
+          (s.sender || '').toLowerCase().includes(query) ||
+          (s.summary || '').toLowerCase().includes(query)
+        );
+      }
+
+      if (sort === 'oldest') filtered.reverse();
+      else if (sort === 'subject') filtered.sort((a, b) => (a.subject || '').localeCompare(b.subject || ''));
+
+      renderCards(filtered);
+
+      if (query && filtered.length === 0) {
+        document.getElementById('empty-state').style.display = 'flex';
+        document.getElementById('empty-state').querySelector('.empty-title').textContent = 'No results found';
+        document.getElementById('empty-state').querySelector('.empty-sub').textContent = `No emails matching "${query}"`;
+      }
+    }
+
+    // ── Shimmer Loader ─────────────────────────────────────────────────────────
+    function showShimmers(n = 3) {
+      const grid = document.getElementById('email-grid');
+      document.getElementById('empty-state').style.display = 'none';
+      grid.querySelectorAll('.email-card,.shimmer-card').forEach(c => c.remove());
+      for (let i = 0; i < n; i++) {
+        const s = document.createElement('div');
+        s.className = 'shimmer-card';
+        s.innerHTML = `
         <div class="shimmer-line" style="width:65%;height:14px;"></div>
         <div class="shimmer-line" style="width:40%;height:10px;"></div>
         <div class="shimmer-line" style="width:90%;height:10px;margin-top:.4rem;"></div>
         <div class="shimmer-line" style="width:75%;height:10px;"></div>
       `;
-      grid.appendChild(s);
+        grid.appendChild(s);
+      }
     }
-  }
 
-  // ── API Calls ──────────────────────────────────────────────────────────────
-  async function fetchEmails() {
-    const btn = document.getElementById('fetch-btn');
-    btn.disabled = true;
-    btn.innerHTML = '<span class="spin">⟳</span> Summarizing...';
-    showShimmers(parseInt(document.getElementById('max-results').value) || 3);
-    toast('Fetching emails and generating summaries…', 'info', 6000);
+    // ── API Calls ──────────────────────────────────────────────────────────────
+    async function fetchEmails() {
+      const btn = document.getElementById('fetch-btn');
+      btn.disabled = true;
+      btn.innerHTML = '<span class="spin">⟳</span> Summarizing...';
+      showShimmers(parseInt(document.getElementById('max-results').value) || 3);
+      toast('Fetching emails and generating summaries…', 'info', 6000);
 
-    const res = await fetch('/api/fetch', {
-      method: 'POST',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({
-        query: document.getElementById('query-input').value || 'is:unread',
-        max_results: parseInt(document.getElementById('max-results').value) || 10,
-      })
-    });
-    const data = await res.json();
+      const res = await fetch('/api/fetch', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          query: document.getElementById('query-input').value || 'is:unread',
+          max_results: parseInt(document.getElementById('max-results').value) || 10,
+        })
+      });
+      const data = await res.json();
 
-    if (data.ok) {
-      toast(`✅ Summarized ${data.count} email(s)!`, 'success');
+      if (data.ok) {
+        toast(`✅ Summarized ${data.count} email(s)!`, 'success');
+        await loadSummaries();
+      } else {
+        toast(`Error: ${data.error}`, 'error', 6000);
+        document.getElementById('email-grid').querySelectorAll('.shimmer-card').forEach(c => c.remove());
+        document.getElementById('empty-state').style.display = 'flex';
+      }
+
+      btn.disabled = false;
+      btn.innerHTML = '<span>⚡</span> Fetch & Summarize';
+    }
+
+    async function loadSummaries() {
+      const res = await fetch('/api/summaries');
+      const data = await res.json();
+      allSummaries = data.summaries || [];
+      filterCards();
+
+      const label = allSummaries.length > 0
+        ? `${allSummaries.length} email(s) summarized — last updated ${new Date().toLocaleTimeString()}`
+        : 'No emails fetched yet';
+      document.getElementById('last-fetch-label').textContent = label;
+    }
+
+    async function clearSummaries() {
+      await fetch('/api/clear', { method: 'POST' });
+      allSummaries = [];
+      renderCards([]);
+      toast('Summaries cleared', 'info');
+      document.getElementById('stat-total').textContent = '0';
+      document.getElementById('stat-att').textContent = '0';
+      document.getElementById('last-fetch-label').textContent = 'No emails fetched yet';
+    }
+
+    // ── Gemini Key ──────────────────────────────────────────────────────────────
+    async function saveGeminiKey() {
+      const key = document.getElementById('gemini-key-input').value.trim();
+      if (!key) { toast('Please enter an API key', 'error'); return; }
+      const res = await fetch('/api/config/gemini', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ api_key: key })
+      });
+      const data = await res.json();
+      const status = document.getElementById('key-status');
+      if (data.ok) {
+        status.textContent = '✓ API key saved successfully';
+        status.className = 'key-status ok';
+        toast('Gemini API key saved!', 'success');
+      } else {
+        status.textContent = '✗ Failed to save key';
+        status.className = 'key-status err';
+      }
+    }
+
+    // ── Polling ────────────────────────────────────────────────────────────────
+    async function startPolling() {
+      const interval = parseInt(document.getElementById('poll-interval').value);
+      const res = await fetch('/api/poll/start', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ interval_minutes: interval })
+      });
+      const data = await res.json();
+      if (data.ok) {
+        setPollingUI(true);
+        toast(`Auto-polling every ${interval} min started`, 'success');
+        // Client-side refresh loop
+        pollingInterval = setInterval(() => loadSummaries(), interval * 60 * 1000);
+      }
+    }
+
+    async function stopPolling() {
+      await fetch('/api/poll/stop', { method: 'POST' });
+      setPollingUI(false);
+      if (pollingInterval) { clearInterval(pollingInterval); pollingInterval = null; }
+      toast('Auto-polling stopped', 'info');
+    }
+
+    function setPollingUI(active) {
+      pollingActive = active;
+      const badge = document.getElementById('poll-status-badge');
+      const text = document.getElementById('poll-status-text');
+      const startBtn = document.getElementById('poll-start-btn');
+      const stopBtn = document.getElementById('poll-stop-btn');
+
+      if (active) {
+        badge.className = 'poll-status poll-active';
+        const mins = document.getElementById('poll-interval').value;
+        text.textContent = `Polling every ${mins}m`;
+        startBtn.style.display = 'none';
+        stopBtn.style.display = 'flex';
+      } else {
+        badge.className = 'poll-status poll-inactive';
+        text.textContent = 'Polling off';
+        startBtn.style.display = 'flex';
+        stopBtn.style.display = 'none';
+      }
+    }
+
+    // Spinner CSS
+    const style = document.createElement('style');
+    style.textContent = '.spin { display:inline-block; animation: spin 0.8s linear infinite; } @keyframes spin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }';
+    document.head.appendChild(style);
+
+    // ── Init ──────────────────────────────────────────────────────────────────
+    window.addEventListener('DOMContentLoaded', async () => {
       await loadSummaries();
-    } else {
-      toast(`Error: ${data.error}`, 'error', 6000);
-      document.getElementById('email-grid').querySelectorAll('.shimmer-card').forEach(c=>c.remove());
-      document.getElementById('empty-state').style.display = 'flex';
-    }
-
-    btn.disabled = false;
-    btn.innerHTML = '<span>⚡</span> Fetch & Summarize';
-  }
-
-  async function loadSummaries() {
-    const res = await fetch('/api/summaries');
-    const data = await res.json();
-    allSummaries = data.summaries || [];
-    filterCards();
-
-    const label = allSummaries.length > 0
-      ? `${allSummaries.length} email(s) summarized — last updated ${new Date().toLocaleTimeString()}`
-      : 'No emails fetched yet';
-    document.getElementById('last-fetch-label').textContent = label;
-  }
-
-  async function clearSummaries() {
-    await fetch('/api/clear', { method: 'POST' });
-    allSummaries = [];
-    renderCards([]);
-    toast('Summaries cleared', 'info');
-    document.getElementById('stat-total').textContent = '0';
-    document.getElementById('stat-att').textContent = '0';
-    document.getElementById('last-fetch-label').textContent = 'No emails fetched yet';
-  }
-
-  // ── Gemini Key ──────────────────────────────────────────────────────────────
-  async function saveGeminiKey() {
-    const key = document.getElementById('gemini-key-input').value.trim();
-    if (!key) { toast('Please enter an API key', 'error'); return; }
-    const res = await fetch('/api/config/gemini', {
-      method: 'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ api_key: key })
+      // Check poll status
+      const pr = await fetch('/api/poll/status');
+      const pd = await pr.json();
+      if (pd.polling) setPollingUI(true);
     });
-    const data = await res.json();
-    const status = document.getElementById('key-status');
-    if (data.ok) {
-      status.textContent = '✓ API key saved successfully';
-      status.className = 'key-status ok';
-      toast('Gemini API key saved!', 'success');
-    } else {
-      status.textContent = '✗ Failed to save key';
-      status.className = 'key-status err';
-    }
-  }
-
-  // ── Polling ────────────────────────────────────────────────────────────────
-  async function startPolling() {
-    const interval = parseInt(document.getElementById('poll-interval').value);
-    const res = await fetch('/api/poll/start', {
-      method: 'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ interval_minutes: interval })
-    });
-    const data = await res.json();
-    if (data.ok) {
-      setPollingUI(true);
-      toast(`Auto-polling every ${interval} min started`, 'success');
-      // Client-side refresh loop
-      pollingInterval = setInterval(() => loadSummaries(), interval * 60 * 1000);
-    }
-  }
-
-  async function stopPolling() {
-    await fetch('/api/poll/stop', { method: 'POST' });
-    setPollingUI(false);
-    if (pollingInterval) { clearInterval(pollingInterval); pollingInterval = null; }
-    toast('Auto-polling stopped', 'info');
-  }
-
-  function setPollingUI(active) {
-    pollingActive = active;
-    const badge = document.getElementById('poll-status-badge');
-    const text  = document.getElementById('poll-status-text');
-    const startBtn = document.getElementById('poll-start-btn');
-    const stopBtn  = document.getElementById('poll-stop-btn');
-
-    if (active) {
-      badge.className = 'poll-status poll-active';
-      const mins = document.getElementById('poll-interval').value;
-      text.textContent = `Polling every ${mins}m`;
-      startBtn.style.display = 'none';
-      stopBtn.style.display = 'flex';
-    } else {
-      badge.className = 'poll-status poll-inactive';
-      text.textContent = 'Polling off';
-      startBtn.style.display = 'flex';
-      stopBtn.style.display = 'none';
-    }
-  }
-
-  // Spinner CSS
-  const style = document.createElement('style');
-  style.textContent = '.spin { display:inline-block; animation: spin 0.8s linear infinite; } @keyframes spin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }';
-  document.head.appendChild(style);
-
-  // ── Init ──────────────────────────────────────────────────────────────────
-  window.addEventListener('DOMContentLoaded', async () => {
-    await loadSummaries();
-    // Check poll status
-    const pr = await fetch('/api/poll/status');
-    const pd = await pr.json();
-    if (pd.polling) setPollingUI(true);
-  });
-</script>
+  </script>
 </body>
+
 </html>
